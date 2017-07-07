@@ -13,9 +13,11 @@ public class BoardListAction implements Action {
 	public Path execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ArrayList<BoardBean> articleList = new ArrayList<BoardBean>();
 		int page = 1; // 현재 페이지
-		int limit = 13; // 한 페이지에 몇 개의 글을 보여 줄 것인가
+		int limit = 12; // 한 페이지에 몇 개의 글을 보여 줄 것인가
 		String sort = "boardList";
 		String search = "";
+		HttpSession session = request.getSession();
+		String name = (String) session.getAttribute("userName");
 
 		if (request.getParameter("page") != null) {
 			page = Integer.parseInt(request.getParameter("page"));
@@ -31,7 +33,7 @@ public class BoardListAction implements Action {
 
 		BoardListService boardListService = new BoardListService();
 		int listCount = boardListService.getListCount(); // 게시글의 총 개수를 구해옴
-		articleList = boardListService.getArticleList(page, limit, sort, search);
+		articleList = boardListService.getArticleList(name, page, limit, sort, search);
 		// 게시글의 리스트를구해옴
 		int maxPage = listCount / limit;
 		if (listCount % limit > 0)

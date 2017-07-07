@@ -20,12 +20,12 @@ public class BoardListService {
 		return listCount;
 	}
 
-	public ArrayList<BoardBean> getArticleList(int page, int limit, String sort, String search) throws Exception {
+	public ArrayList<BoardBean> getArticleList(String name, int page, int limit, String sort, String search) throws Exception {
 		ArrayList<BoardBean> articleList = null;
 		Connection conn = getConnection();
 		DAO dao = DAO.getInstance();
 		dao.setConnection(conn);
-		articleList = dao.selectArticleList(page, limit, sort, search);
+		articleList = dao.selectArticleList(name, page, limit, sort, search);
 		close(conn);
 		return articleList;
 

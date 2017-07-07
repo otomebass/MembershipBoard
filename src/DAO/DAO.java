@@ -52,7 +52,7 @@ public class DAO {
 	}
 
 	// 湲� 紐⑸줉 蹂닿린
-	public ArrayList<BoardBean> selectArticleList(int page, int limit, String sort, String search) {
+	public ArrayList<BoardBean> selectArticleList(String name, int page, int limit, String sort, String search) {
 
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -64,22 +64,22 @@ public class DAO {
 		try {
 
 			if (sort.equals("readCount")) {
-				sql = "select * from board order by readCount desc limit ?,13";
+				sql = "select * from board order by readCount desc limit ?,12";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, startRow);
 			} else if (sort.equals("replyCount")) {
-				sql = "select * from reply order by replyCount desc limit ?,13";
+				sql = "select * from reply order by replyCount desc limit ?,12";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, startRow);
 			} else if (sort.equals("searchPro")) {
-				sql = "select * from board where name like ? or title like ? or content like ? limit ?,13";
+				sql = "select * from board inner join user on user.id=board.id where user.name like ? or board.title like ? or board.content like ? limit ?,12";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, "%" + search + "%");
 				pstmt.setString(2, "%" + search + "%");
 				pstmt.setString(3, "%" + search + "%");
 				pstmt.setInt(4, startRow);
 			} else {
-				sql = "select * from board order by boardNo desc limit ?,13";
+				sql = "select * from board order by boardNo desc limit ?,12";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, startRow);
 			}
@@ -186,18 +186,17 @@ public class DAO {
 		return updateCount;
 	}
 
-	public int updateArticle(BoardBean article, String name) {
+	public int updateArticle(BoardBean article) {
 
 		int updateCount = 0;
 		PreparedStatement pstmt = null;
-		String sql = "update board set name=?, title=?, content=? where boardNo=?";
+		String sql = "update board set title=?, content=? where boardNo=?";
 
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, name);
-			pstmt.setString(2, article.getTitle());
-			pstmt.setString(3, article.getContent());
-			pstmt.setInt(4, article.getBoardNo());
+			pstmt.setString(1, article.getTitle());
+			pstmt.setString(2, article.getContent());
+			pstmt.setInt(3, article.getBoardNo());
 			updateCount = pstmt.executeUpdate();
 		} catch (Exception e) {
 			System.out.println("updateArticle Error" + e);
@@ -205,30 +204,6 @@ public class DAO {
 			close(pstmt);
 		}
 		return updateCount;
-	}
-
-	public boolean isArticleBoardWirter(int boardNo, String password) {
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		String sql = "select * from board where boardNo=?";
-		boolean isWriter = false;
-
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, boardNo);
-			rs = pstmt.executeQuery();
-			rs.next();
-
-			if (password.equals(rs.getString("password"))) {
-				isWriter = true;
-			}
-		} catch (Exception e) {
-			System.out.println("isArticleBoardWriter Error: " + e);
-		} finally {
-			close(rs);
-			close(pstmt);
-		}
-		return isWriter;
 	}
 
 	public int deleteArticle(int boardNo) {
@@ -373,7 +348,6 @@ public class DAO {
 
 			if (rs.next()) {
 				loginUser = new User();
-				loginUser.setNo(rs.getInt("no"));
 				loginUser.setName(rs.getString("name"));
 				loginUser.setId(rs.getString("id"));
 				loginUser.setPwd(rs.getString("pwd"));

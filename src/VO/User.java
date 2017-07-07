@@ -1,19 +1,13 @@
 package VO;
 
 public class User {
-	private int no;
 	private String name;
 	private String id;
 	private String pwd;
 	private String email;
 	private String addr;
 	private String who;
-	public int getNo() {
-		return no;
-	}
-	public void setNo(int no) {
-		this.no = no;
-	}
+	
 	public String getName() {
 		return name;
 	}

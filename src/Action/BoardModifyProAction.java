@@ -16,21 +16,21 @@ public class BoardModifyProAction implements Action {
 		int boardNo = Integer.parseInt(request.getParameter("boardNo"));
 		String page = request.getParameter("page");
 		HttpSession session = request.getSession();
-		String name = (String) session.getAttribute("userName");
+		String userPwd = (String) session.getAttribute("userPwd");
+		String password = request.getParameter("password");
 		BoardBean article = new BoardBean();
 		BoardModifyProService boardModifyProService = new BoardModifyProService();
-		boolean isArticleWriter = boardModifyProService.isArticleWriter(boardNo, request.getParameter("password"));
 
-		if (!isArticleWriter) {
+		if (!password.equals(userPwd)) {
 			String pwChk = "pwFalse";
 			request.setAttribute("pwChk", pwChk);
 			path = new Path();
 			path.setPath("boardModifyForm.do?pwChk=" + pwChk);
 		} else {
-			article.setBoardNo(boardNo);			
+			article.setBoardNo(boardNo);
 			article.setTitle(request.getParameter("title"));
 			article.setContent(request.getParameter("content"));
-			isModifySuccess = boardModifyProService.modifyArticle(article,name);
+			isModifySuccess = boardModifyProService.modifyArticle(article);
 
 			if (!isModifySuccess) {
 				String pwChk = "modifyFalse";

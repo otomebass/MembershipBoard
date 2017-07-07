@@ -36,25 +36,16 @@
 			</div>
 			<br />
 
-			<div class="form-group">
-				<label for="name">
-					<strong>이&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;름</strong>
-				</label>
-				<input autofocus="autofocus" class="form-control" type="text" name="name" id="name" required="required" placeholder="이     름" />
-			</div>
 
-			<div class="form-group">
-				<label for="password">
-					<strong>비밀번호</strong>
-				</label>
-				<input class="form-control" type="password" name="password" id="password" required="required" placeholder="비밀번호" />
-			</div>
+			<h5 style="color: red;">
+				<strong>${userName}&nbsp;님 비방이나 욕설은 삼가해주세요 </strong>
+			</h5>
 
 			<div class="from-group">
 				<label for="title">
 					<strong>제&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;목</strong>
 				</label>
-				<input class="form-control" type="text" name="title" id="title" required="required" placeholder="제    목" />
+				<input class="form-control" type="text" name="title" id="title" required="required" placeholder="제    목" autofocus="autofocus" />
 			</div>
 
 			<div class="form-group">

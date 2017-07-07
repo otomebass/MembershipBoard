@@ -9,6 +9,7 @@ public class BoardBean {
 	private String content;
 	private int readCount;
 	private Date boardDate;
+	
 	public int getBoardNo() {
 		return boardNo;
 	}

@@ -46,14 +46,16 @@
 		<table class="table">
 			<tr>
 				<td class="col-xs-1 text-center">글쓴이</td>
-				<td class="col-xs-11">${article.name }</td>
+				<td class="col-xs-11">${userName }</td>
 			</tr>
 			<tr>
 				<td class="col-xs-1 text-center">제&nbsp;&nbsp;&nbsp;&nbsp;목</td>
 				<td class="col-xs-11">${article.title }</td>
 			</tr>
 			<tr height="300px">
-				<td colspan="2">${article.content}</td>
+				<td colspan="2">
+					<textarea style="background-color: transparent;" readonly="readonly" class="form-control" name="content" id="content" rows="15">${article.content}</textarea>
+				</td>
 			</tr>
 			<tr>
 				<td colspan="2"></td>

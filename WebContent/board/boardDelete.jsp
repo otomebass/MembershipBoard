@@ -19,7 +19,7 @@
 			<input type="hidden" name="page" value="${page }" />
 			<div class="form-group">
 				<br />
-				<label> <strong>글 비밀번호</strong>
+				<label> <strong>사용자 비밀번호</strong>
 				</label>
 				<input class="form-control" type="password" name="password" required="required" placeholder="비밀번호" autofocus="autofocus" />
 			</div>

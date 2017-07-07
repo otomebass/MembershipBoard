@@ -23,6 +23,7 @@ public class FrontController extends HttpServlet {
 		String command = requestURI.substring(contextPath.length());
 		Path path = null;
 		Action action = null;
+
 		if (command.equals("/MainPage.do")) {
 			path = new Path();
 			path.setRedirect(true);
@@ -83,8 +84,7 @@ public class FrontController extends HttpServlet {
 			path.setPath("/board/boardDelete.jsp");
 		} else if (command.equals("/AdminPage.do")) {
 			path = new Path();
-			path.setRedirect(true);
-			path.setPath(request.getContextPath() + "/board/AdminPage.jsp");
+			path.setPath("/board/AdminPage.jsp");
 		} else if (command.equals("/AdminConfirmUser.do")) {
 			action = new AdminConfirmUserAction();
 			try {
@@ -120,15 +120,19 @@ public class FrontController extends HttpServlet {
 				// TODO: handle exception
 				e.printStackTrace();
 			}
-		} else if (command.equals("loginChk.do")) {
-			// 아이디, 비번 받는 폼에서 이곳으로 와서 로그인 체크
-			System.out.println("컴온");
+		} else if (command.equals("/loginChk.do")) {
 			action = new LoginProAction();
 			try {
 				path = action.execute(request, response);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		} else if (command.equals("/logout.do")) {
+			HttpSession session = request.getSession();
+			session.invalidate();
+			path = new Path();
+			path.setRedirect(true);
+			path.setPath(request.getContextPath() + "/MainPage.jsp?pwChk=logout");
 		}
 
 		if (path != null) {

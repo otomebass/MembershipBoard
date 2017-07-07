@@ -18,9 +18,11 @@ public class BoardDeleteProAction implements Action {
 		int boardNo = Integer.parseInt(request.getParameter("boardNo"));
 		int page = Integer.parseInt(request.getParameter("page"));
 		BoardDeleteProService boardDeleteProService = new BoardDeleteProService();
-		boolean isArticleWriter = boardDeleteProService.isArticleWriter(boardNo, request.getParameter("password"));
+		String password = request.getParameter("password");
+		HttpSession session = (HttpSession) request.getSession();
+		String loginUser = (String) session.getAttribute("userPwd");
 
-		if (!isArticleWriter) {
+		if (!password.equals(loginUser)) {
 			String pwChk = "pwFalse";
 			request.setAttribute("pwChk", pwChk);
 			path = new Path();
