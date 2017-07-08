@@ -14,7 +14,7 @@ public class NewUserAction implements Action {
 	public Path execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
 		Path path = new Path();
-		path.setPath("/MainPage.jsp");
+		path.setPath("/MainPage.jsp?pwChk=join");
 		NewUser newuser = new NewUser();
 
 		newuser.setName(request.getParameter("name"));

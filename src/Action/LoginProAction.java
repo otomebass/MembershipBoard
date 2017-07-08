@@ -21,7 +21,7 @@ public class LoginProAction implements Action {
 			session.setAttribute("userPwd", pwd);
 			session.setAttribute("userName", loginUser.getName());
 			path.setPath("boardList.do");
-
+ 
 		} else {
 			String pwChk = "loginFalse";
 			request.setAttribute("pwChk", pwChk);

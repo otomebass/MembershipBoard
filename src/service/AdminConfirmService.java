@@ -1,14 +1,12 @@
 package service;
 
-import static DB.DB.close;
-import static DB.DB.getConnection;
+import static DB.DB.*;
 
-import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.*;
+import java.util.*;
 
-import DAO.DAO;
-import VO.NewUser;
+import DAO.*;
+import VO.*;
 
 public class AdminConfirmService {
 
@@ -22,3 +20,4 @@ public class AdminConfirmService {
 		return newuser;
 	}
 }
+ 

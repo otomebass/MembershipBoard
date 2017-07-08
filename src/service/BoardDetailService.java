@@ -3,11 +3,21 @@ package service;
 import static DB.DB.*;
 
 import java.sql.*;
+import java.util.*;
 
 import DAO.*;
 import VO.*;
 
 public class BoardDetailService {
+
+	public int getReplyCount(int boardNo) {
+		Connection conn = getConnection();
+		DAO dao = DAO.getInstance();
+		dao.setConnection(conn);
+		int getReplyCount = dao.replyCount(boardNo);
+
+		return getReplyCount;
+	}
 
 	public BoardBean getArticle(int boardNo) throws Exception {
 
@@ -26,8 +36,21 @@ public class BoardDetailService {
 
 		article = dao.selectArticle(boardNo);
 
+		commit(conn);
 		close(conn);
 
 		return article;
+	}
+
+	public ArrayList<ReplyBean> getReplyList(int boardNo) {
+
+		ArrayList<ReplyBean> replyList = new ArrayList<ReplyBean>();
+		Connection conn = getConnection();
+		DAO dao = DAO.getInstance();
+		dao.setConnection(conn);
+		replyList = dao.selectReplyList(boardNo);
+
+		close(conn);
+		return replyList;
 	}
 }

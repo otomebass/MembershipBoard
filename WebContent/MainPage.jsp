@@ -5,7 +5,7 @@
 <html>
 <head>
 
-<meta charset=UTF-8">
+<meta charset=UTF-8>
 <title>Welcome Neverland!!</title>
 <link rel="stylesheet" type="text/css" href="css/style.css">
 <script type="text/javascript" src="js/board.js"></script>
@@ -15,8 +15,8 @@
 <link rel="stylesheet" href="<%=request.getContextPath()%>/css/custom.css" />
 </head>
 <body>
-
 	<c:set var="pwChk" value="${param.pwChk }" />
+
 	<c:if test="${not empty pwChk}">
 		<jsp:include page="/board/alert.jsp" />
 	</c:if>
@@ -28,7 +28,6 @@
 		비밀번호 :
 		<input type="password" name="pwd">
 		<input type="button" value="관리자로그인" onclick="admincheck()">
-
 
 		<br>
 		<input type="submit" value="로그인">

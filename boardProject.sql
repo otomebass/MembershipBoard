@@ -14,3 +14,5 @@ reference key id (id) references user(id)
 select * from board;
 
 show columns from board;
+
+show columns from reply;

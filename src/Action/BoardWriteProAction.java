@@ -15,6 +15,7 @@ public class BoardWriteProAction implements Action {
 		String page = request.getParameter("page");
 		request.setAttribute("page", page);
 		HttpSession session = request.getSession();
+		boardBean.setName((String) session.getAttribute("userName"));
 		boardBean.setId((String) session.getAttribute("userId"));
 		boardBean.setTitle(request.getParameter("title"));
 		boardBean.setContent(request.getParameter("content"));

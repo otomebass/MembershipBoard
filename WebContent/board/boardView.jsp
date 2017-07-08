@@ -33,20 +33,23 @@
 				<button class="btn btn-danger pull-right" type="button" onclick="location.href='boardList.do?page=${page}'">
 					<strong>목록</strong>
 				</button>
-				<button class="btn btn-danger pull-right" type="button" onclick="deletePro();">
-					<strong>삭제</strong>
-				</button>
-				<button class="btn btn-danger pull-right" type="button" onclick="location.href='boardModifyForm.do?boardNo=${article.boardNo}&page=${page }'">
-					<strong>수정</strong>
-				</button>
+				<c:if test="${userId eq article.id }">
+					<button class="btn btn-danger pull-right" type="button" onclick="deletePro();">
+						<strong>삭제</strong>
+					</button>
+					<button class="btn btn-danger pull-right" type="button" onclick="location.href='boardModifyForm.do?boardNo=${article.boardNo}&page=${page }'">
+						<strong>수정</strong>
+					</button>
+				</c:if>
 			</div>
 		</div>
 		<br />
 
+
 		<table class="table">
 			<tr>
 				<td class="col-xs-1 text-center">글쓴이</td>
-				<td class="col-xs-11">${userName }</td>
+				<td class="col-xs-11">${article.name }</td>
 			</tr>
 			<tr>
 				<td class="col-xs-1 text-center">제&nbsp;&nbsp;&nbsp;&nbsp;목</td>
@@ -57,10 +60,47 @@
 					<textarea style="background-color: transparent;" readonly="readonly" class="form-control" name="content" id="content" rows="15">${article.content}</textarea>
 				</td>
 			</tr>
-			<tr>
-				<td colspan="2"></td>
-			</tr>
 		</table>
+
+		<form action="replyPro.do?boardNo=${article.boardNo}" class="form-group" method="post">
+			<input type="hidden" name="page" value="${page }" />
+			<div class="table-responsible">
+				<table class="table table-hover table-bordered">
+					<tr>
+						<td>
+							<div class="row">
+								<div class="col-md-6 pull-left">
+									<strong style="color: red;">${userName }&nbsp;님 비방이나 욕설은 삼가해 주세요</strong>
+								</div>
+								<div class="col-md-6">
+									<button class="btn btn-sm btn-danger pull-right" type="submit">등록</button>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<textarea class="form-control" name="replyContent" id="replyContent" rows="3" required="required" autofocus="autofocus"></textarea>
+						</td>
+					</tr>
+
+					<c:if test="${replyCount > 0 }" />
+					<c:forEach var="reply" items="${replyList }">
+						<c:if test="${article.boardNo eq reply.boardNo}">
+							<tr>
+								<td>
+									<div class="row">
+										<div class="col-md-2">${reply.name }</div>
+										<div class="col-me-10">${reply.content }</div>
+									</div>
+								</td>
+							</tr>
+						</c:if>
+					</c:forEach>
+				</table>
+			</div>
+		</form>
+
 
 		<!-- 삭제 시 비밀번호 확인 -->
 
@@ -105,7 +145,6 @@
 				</div>
 			</div>
 		</form>
-
 	</div>
 	<script src="<%=request.getContextPath()%>/js/jquery-3.2.1.min.js" type="text/javascript"></script>
 	<script src="<%=request.getContextPath()%>/js/bootstrap.min.js" type="text/javascript"></script>

@@ -14,6 +14,7 @@ public class DB {
 			DataSource ds = (DataSource) init.lookup("java:comp/env/jdbc/boardProject");
 			conn = ds.getConnection();
 			conn.setAutoCommit(false);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -26,7 +27,7 @@ public class DB {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+	} 
 
 	public static void close(Statement stmt) {
 		try {

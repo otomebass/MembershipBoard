@@ -22,7 +22,7 @@ public class PageInfo {
 	public void setMaxPage(int maxPage) {
 		this.maxPage = maxPage;
 	}
-
+ 
 	public int getStartPage() {
 		return startPage;
 	}

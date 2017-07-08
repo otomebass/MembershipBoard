@@ -7,20 +7,20 @@ import java.sql.*;
 import DAO.*;
 import VO.*;
 
-public class BoardWriteProService {
+public class ReplyProService {
 
-	public boolean registerArticle(BoardBean boardBean) throws Exception {
+	public boolean registerReply(ReplyBean replyBean, int boardNo) throws Exception {
 
 		boolean isWriteSuccess = false;
 		Connection conn = getConnection();
 		DAO dao = DAO.getInstance();
 		dao.setConnection(conn);
 
-		int insertCount = dao.insertArticle(boardBean);
+		int isSuccessReply = dao.insertReply(replyBean, boardNo);
 
-		if (insertCount > 0) {
-			commit(conn);
+		if (isSuccessReply > 0) {
 			isWriteSuccess = true;
+			commit(conn);
 		} else {
 			rollback(conn);
 		}
@@ -28,4 +28,3 @@ public class BoardWriteProService {
 		return isWriteSuccess;
 	}
 }
- 

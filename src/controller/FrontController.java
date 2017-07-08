@@ -85,6 +85,13 @@ public class FrontController extends HttpServlet {
 		} else if (command.equals("/AdminPage.do")) {
 			path = new Path();
 			path.setPath("/board/AdminPage.jsp");
+		} else if (command.equals("/replyPro.do")) {
+			action = new ReplyProAction();
+			try {
+				path = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		} else if (command.equals("/AdminConfirmUser.do")) {
 			action = new AdminConfirmUserAction();
 			try {
@@ -127,12 +134,6 @@ public class FrontController extends HttpServlet {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		} else if (command.equals("/logout.do")) {
-			HttpSession session = request.getSession();
-			session.invalidate();
-			path = new Path();
-			path.setRedirect(true);
-			path.setPath(request.getContextPath() + "/MainPage.jsp?pwChk=logout");
 		}
 
 		if (path != null) {

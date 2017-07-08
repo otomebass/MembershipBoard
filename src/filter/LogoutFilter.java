@@ -10,18 +10,19 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.*;
 
-/**
- * Servlet Filter implementation class CharaceterEncodingFilter
- */
-@WebFilter("/*")
-public class CommonFilter implements Filter {
+import VO.*;
 
-	private String encoding;
+/**
+ * Servlet Filter implementation class LogoutFilter
+ */
+@WebFilter("/logout.do")
+public class LogoutFilter implements Filter {
 
 	/**
 	 * Default constructor.
 	 */
-	public CommonFilter() {
+	public LogoutFilter() {
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -34,9 +35,15 @@ public class CommonFilter implements Filter {
 	/**
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		request.setCharacterEncoding(encoding);
-		response.setContentType("text/html;charset=UTF-8");		
+	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+
+		HttpServletRequest request = (HttpServletRequest) req;
+		HttpSession session = request.getSession();
+		session.invalidate();
+
+		HttpServletResponse response = (HttpServletResponse) res;
+		response.sendRedirect("/boardProject/MainPage.jsp?pwChk=logout");
+
 		chain.doFilter(request, response);
 	}
 
@@ -44,11 +51,7 @@ public class CommonFilter implements Filter {
 	 * @see Filter#init(FilterConfig)
 	 */
 	public void init(FilterConfig fConfig) throws ServletException {
-		encoding = fConfig.getInitParameter("encoding");
-		if (encoding == null) {
-			encoding = "UTF-8";
-		}
+		// TODO Auto-generated method stub
 	}
-	
 
 }

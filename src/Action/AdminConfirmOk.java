@@ -17,7 +17,7 @@ public class AdminConfirmOk implements Action {
 		AdminConfirmOkService acok = new AdminConfirmOkService();
 		acok.ConfirmOk(id);
 		
-		path.setPath("/AdminConfirmUser.do");
+		path.setPath("/AdminConfirmUser.do"); 
 		return path;
 	}
 

@@ -1,12 +1,11 @@
 package service;
 
-import static DB.DB.close;
-import static DB.DB.getConnection;
+import static DB.DB.*;
 
-import java.sql.Connection;
+import java.sql.*;
 
-import DAO.DAO;
-import VO.NewUser;
+import DAO.*;
+import VO.*;
 
 public class NewUserService {
 
@@ -19,3 +18,4 @@ public class NewUserService {
 		close(conn);
 	}
 }
+ 

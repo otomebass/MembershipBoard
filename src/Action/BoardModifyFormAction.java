@@ -25,5 +25,5 @@ public class BoardModifyFormAction implements Action {
 		path.setPath("/board/boardModify.jsp");
 		return path;
 	}
-
+ 
 }

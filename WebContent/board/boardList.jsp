@@ -61,7 +61,8 @@
 							<td class="col-md-5">
 								<a href="boardDetail.do?boardNo=${article.boardNo }&page=${page}"> ${article.title }</a>
 							</td>
-							<td class="col-md-2 text-center">${userName }</td>
+							<td class="col-md-2 text-center">${article.name }</td>
+
 							<td class="col-md-2 text-center">
 								<fmt:formatDate value="${article.boardDate }" />
 							</td>

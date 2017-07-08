@@ -27,7 +27,7 @@ public class BoardDeleteProAction implements Action {
 			request.setAttribute("pwChk", pwChk);
 			path = new Path();
 			path.setPath("boardDetail.do?pwChk=" + pwChk);
-		} else {
+		} else { 
 			boolean isDeleteSuccess = boardDeleteProService.deleteArticle(boardNo);
 
 			if (!isDeleteSuccess) {

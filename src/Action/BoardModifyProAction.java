@@ -20,7 +20,7 @@ public class BoardModifyProAction implements Action {
 		String password = request.getParameter("password");
 		BoardBean article = new BoardBean();
 		BoardModifyProService boardModifyProService = new BoardModifyProService();
-
+ 
 		if (!password.equals(userPwd)) {
 			String pwChk = "pwFalse";
 			request.setAttribute("pwChk", pwChk);

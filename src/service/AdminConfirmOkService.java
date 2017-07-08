@@ -1,9 +1,10 @@
 package service;
 
 import static DB.DB.*;
-import java.sql.Connection;
 
-import DAO.DAO;
+import java.sql.*;
+
+import DAO.*;
 
 public class AdminConfirmOkService {
 
@@ -19,3 +20,4 @@ public class AdminConfirmOkService {
 		close(conn);
 	}
 }
+ 
