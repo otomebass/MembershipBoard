@@ -59,7 +59,7 @@
 						<tr>
 							<td class="col-md-1 text-center">${article.boardNo }</td>
 							<td class="col-md-5">
-								<a href="boardDetail.do?boardNo=${article.boardNo }&page=${page}"> ${article.title }</a>
+								<a href="boardDetail.do?boardNo=${article.boardNo }&page=${page}">${article.title }&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge">${article.replyCount } </span></a>
 							</td>
 							<td class="col-md-2 text-center">${article.name }</td>
 

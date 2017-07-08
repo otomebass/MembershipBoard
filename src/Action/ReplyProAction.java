@@ -19,10 +19,11 @@ public class ReplyProAction implements Action {
 		replyBean.setBoardNo(boardNo);
 		replyBean.setContent(request.getParameter("replyContent"));
 		replyBean.setName((String) session.getAttribute("userName"));
+		replyBean.setId((String) session.getAttribute("userId"));
 
 		ReplyProService replyProService = new ReplyProService();
 		boolean isWriteSuccess = replyProService.registerReply(replyBean, boardNo);
-
+		replyProService.updateReplyCount(boardNo);
 		if (!isWriteSuccess) {
 			String pwChk = "replyWriteFalse";
 			request.setAttribute("pwChk", pwChk);

@@ -92,6 +92,18 @@
 									<h3>Love & Peace</h3>
 								</div>
 							</c:when>
+							<c:when test="${pwChk eq 'successDeleteReply' }">
+								<h4 class="modal-title" id="myModalLabel">댓글 삭제 성공</h4>
+								<div class="modal-body">
+									<h3 style="color: red;">댓글을 삭제하였습니다</h3>
+								</div>
+							</c:when>
+							<c:when test="${pwChk eq 'falseDeleteReply' }">
+								<h4 class="modal-title" id="myModalLabel">댓글 삭제 실패</h4>
+								<div class="modal-body">
+									<h3 style="color: red;">댓글 삭제에 실패하였습니다</h3>
+								</div>
+							</c:when>
 						</c:choose>
 					</div>
 					<div class="modal-footer">

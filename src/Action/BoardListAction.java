@@ -1,5 +1,5 @@
-package Action;
-
+package Action; 
+  
 import java.util.*;
 
 import javax.servlet.http.*;
@@ -17,7 +17,7 @@ public class BoardListAction implements Action {
 		int limit = 12; // 한 페이지에 몇 개의 글을 보여 줄 것인가
 		String sort = "boardList";
 		String search = "";
-
+ 
 		if (request.getParameter("page") != null) {
 			page = Integer.parseInt(request.getParameter("page"));
 		}
@@ -25,7 +25,7 @@ public class BoardListAction implements Action {
 		if (request.getParameter("sort") != null) {
 			sort = request.getParameter("sort");
 		}
-
+ 
 		if (request.getParameter("search") != null) {
 			search = request.getParameter("search");
 		}

@@ -1,5 +1,5 @@
 package Action;
-
+ 
 import javax.servlet.http.*;
 
 import VO.*;
@@ -9,7 +9,7 @@ public class BoardModifyFormAction implements Action {
 
 	@Override
 	public Path execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+ 
 		Path path = new Path();
 		int boardNo = Integer.parseInt(request.getParameter("boardNo"));
 		String page = request.getParameter("page");
@@ -27,3 +27,4 @@ public class BoardModifyFormAction implements Action {
 	}
  
 }
+ 

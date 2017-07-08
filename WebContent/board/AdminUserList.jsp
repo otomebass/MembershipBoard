@@ -16,6 +16,7 @@
 			<th>이메일</th>
 			<th>주소</th>
 			<th>추천인</th>
+			<th>Ban</th>
 		</tr>
 	<c:forEach var="user" items="${user}">
 		<tr>
@@ -25,10 +26,14 @@
 			<td>${user.email }</td>
 			<td>${user.addr }</td>
 			<td>${user.who }</td>
+			<td><button onclick="location.href='Ban.do?id=${user.id}'">BAN</button></td>
 		</tr>
 	</c:forEach>
 	<tr>
-		<td colspan="6">
+	
+	</tr>
+	<tr>
+		<td colspan="7">
 			<button onclick="location.href='AdminPage.do'">뒤로가기</button>
 		</td>
 	</tr>

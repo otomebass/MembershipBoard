@@ -1,5 +1,5 @@
 package filter;
-
+ 
 import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -23,7 +23,7 @@ public class LoginCheckFilter implements Filter {
 		// TODO Auto-generated constructor stub
 	}
 
-	/**
+	/** 
 	 * @see Filter#destroy()
 	 */
 	public void destroy() {

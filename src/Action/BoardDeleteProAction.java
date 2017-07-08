@@ -1,4 +1,4 @@
-package Action;
+package Action;   
 
 import java.io.*;
 
@@ -21,13 +21,13 @@ public class BoardDeleteProAction implements Action {
 		String password = request.getParameter("password");
 		HttpSession session = (HttpSession) request.getSession();
 		String loginUser = (String) session.getAttribute("userPwd");
-
+ 
 		if (!password.equals(loginUser)) {
 			String pwChk = "pwFalse";
 			request.setAttribute("pwChk", pwChk);
 			path = new Path();
 			path.setPath("boardDetail.do?pwChk=" + pwChk);
-		} else { 
+		} else {  
 			boolean isDeleteSuccess = boardDeleteProService.deleteArticle(boardNo);
 
 			if (!isDeleteSuccess) {

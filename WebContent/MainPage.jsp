@@ -5,7 +5,7 @@
 <html>
 <head>
 
-<meta charset=UTF-8>
+<meta charset=UTF-8">
 <title>Welcome Neverland!!</title>
 <link rel="stylesheet" type="text/css" href="css/style.css">
 <script type="text/javascript" src="js/board.js"></script>
@@ -13,26 +13,53 @@
 <title>Welcome Neverland</title>
 <link rel="stylesheet" href="<%=request.getContextPath()%>/css/bootstrap.min.css" />
 <link rel="stylesheet" href="<%=request.getContextPath()%>/css/custom.css" />
+<!-- <script type="text/javascript"
+	src="https://code.jquery.com/jquery-3.1.0.js"></script>
+<script>
+	$(document).ready(function(){
+		$("#admin").click(function(){
+		var str = "admin";
+			if($("#id").text() == str && $(":password").text() == str)
+			location.href="AdminPage.do";
+		})
+	}) 
+</script>-->
 </head>
 <body>
-	<c:set var="pwChk" value="${param.pwChk }" />
 
-	<c:if test="${not empty pwChk}">
+	<c:if test="${not empty param.pwChk}">
 		<jsp:include page="/board/alert.jsp" />
 	</c:if>
 
-	<h3>게시판 접속</h3>
-	<form action="loginChk.do" name="frm" method="post">
-		아이디 :
-		<input type="text" name="id">
-		비밀번호 :
-		<input type="password" name="pwd">
-		<input type="button" value="관리자로그인" onclick="admincheck()">
+	<jsp:include page="/board/header.jsp" />
+	<br />
+	<br />
+	<br />
+	<div class="container">
 
-		<br>
-		<input type="submit" value="로그인">
-		<input type="reset" value="종료" onclick="window.close()">
-		<input type="button" value="회원가입" onclick="location.href='NewUserForm.do'">
-	</form>
+		<form action="loginChk.do" name="frm" method="post" role="form">
+
+			<input class="btn btn-dnager pull-right" type="button" id="admin" name="admin" value="관리자로그인" onclick="location.href='AdminPage.do'">
+			<br />
+			<div class="form-group">
+				<label for="id">
+					<strong>ID</strong>
+				</label>
+				<input class="form-control" type="text" name="id" id="id" required="required" autofocus="autofocus" placeholder="ID">
+			</div>
+			<div class="form-group">
+				<label for="pwd">
+					<strong>비밀번호</strong>
+				</label>
+				<input class="form-control" type="password" name="pwd" id="pwd" required="required" placeholder="PASSWORD">
+			</div>
+			<input type="submit" id="login" value="로그인">
+			<input type="reset" value="종료" onclick="window.close()">
+			<input type="button" value="회원가입" onclick="location.href='NewUserForm.do'">
+		</form>
+	</div>
+
+	<script src="<%=request.getContextPath()%>/js/jquery-3.2.1.min.js" type="text/javascript"></script>
+	<script src="<%=request.getContextPath()%>/js/bootstrap.min.js" type="text/javascript"></script>
 </body>
 </html>

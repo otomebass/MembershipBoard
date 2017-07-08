@@ -31,13 +31,4 @@ public class BoardListService {
 
 	}
 
-	public int getReplyCount(int boardNo) {
-		Connection conn = getConnection();
-		DAO dao = DAO.getInstance();
-		dao.setConnection(conn);
-		int getReplyCount = dao.replyCount(boardNo);
-
-		return getReplyCount;
-	}
-
 }

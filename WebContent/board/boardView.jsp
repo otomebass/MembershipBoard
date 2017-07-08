@@ -20,8 +20,8 @@
 
 	<jsp:include page="header.jsp" />
 
-	<c:if test="${not empty pwChk}">
 
+	<c:if test="${not empty pwChk  || not empty param.pwChk}">
 		<jsp:include page="alert.jsp" />
 	</c:if>
 
@@ -91,7 +91,12 @@
 								<td>
 									<div class="row">
 										<div class="col-md-2">${reply.name }</div>
-										<div class="col-me-10">${reply.content }</div>
+										<div class="col-md-8">${reply.content }</div>
+										<div class="col-md-2">
+											<c:if test="${userId eq reply.id }">
+												<a href="replyDeletePro.do?pkNo=${reply.pkNo }&boardNo=${article.boardNo}&page=${page}" class="pull-right"><strong>삭제</strong></a>
+											</c:if>
+										</div>
 									</div>
 								</td>
 							</tr>

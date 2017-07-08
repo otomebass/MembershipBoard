@@ -50,6 +50,12 @@ public class BoardDetailService {
 		dao.setConnection(conn);
 		replyList = dao.selectReplyList(boardNo);
 
+		if (replyList != null) {
+			commit(conn);
+		} else {
+			rollback(conn);
+		}
+
 		close(conn);
 		return replyList;
 	}

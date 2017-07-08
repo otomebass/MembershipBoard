@@ -68,9 +68,14 @@ public class DAO {
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, startRow);
 			} else if (sort.equals("replyCount")) {
-				sql = "select * ";
-				sql += "from board,reply where board.boardNo=reply.boardNo ";
-				sql += "group by reply.boardNo order by max(replyCount) desc limit ?,12";
+				sql = "select * from board order by replyCount desc limit ?, 12";
+				/*
+				 * sql +=
+				 * "from board left outer join reply on board.boardNo=reply.boardNo "
+				 * ; sql +=
+				 * "group by board.boardNo order by max(replyCount) desc limit ?,12"
+				 * ;
+				 */
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, startRow);
 			} else if (sort.equals("searchPro")) {
@@ -97,6 +102,7 @@ public class DAO {
 				board.setContent(rs.getString("content"));
 				board.setReadCount(rs.getInt("readCount"));
 				board.setBoardDate(rs.getDate("boardDate"));
+				board.setReplyCount(rs.getInt("replyCount"));
 				articleList.add(board);
 			}
 
@@ -115,6 +121,7 @@ public class DAO {
 		ResultSet rs = null;
 		int num = 0;
 		int insertCount = 0;
+		int replyCount = 0;
 		String sql = "";
 
 		try {
@@ -126,8 +133,8 @@ public class DAO {
 			else
 				num = 1;
 
-			sql = "insert into board(name,boardNo,id,title,content,readCount,boardDate) ";
-			sql += "values(?,?,?,?,?,?,now())";
+			sql = "insert into board(name,boardNo,id,title,content,readCount,replyCount,boardDate) ";
+			sql += "values(?,?,?,?,?,?,?,now())";
 			pstmt2 = conn.prepareStatement(sql);
 			pstmt2.setString(1, article.getName());
 			pstmt2.setInt(2, num);
@@ -135,6 +142,7 @@ public class DAO {
 			pstmt2.setString(4, article.getTitle());
 			pstmt2.setString(5, article.getContent());
 			pstmt2.setInt(6, 0);
+			pstmt2.setInt(7, 0);
 
 			insertCount = pstmt2.executeUpdate();
 		} catch (Exception e) {
@@ -174,6 +182,33 @@ public class DAO {
 			close(pstmt);
 		}
 		return boardBean;
+	}
+
+	public int updateReplycount(int boardNo) {
+		PreparedStatement pstmt = null;
+		PreparedStatement pstmt2 = null;
+		ResultSet rs = null;
+		int updateReplyCount = 0;
+		int replyCount = 0;
+		String sql = "";
+		try {
+			pstmt = conn.prepareStatement("select max(replyCount) from reply where boardNo=" + boardNo);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				replyCount = rs.getInt(1) + 1;
+			} else {
+				replyCount = 1;
+			}
+			pstmt2 = conn.prepareStatement("update board set replyCount=" + replyCount + " where boardNo=" + boardNo);
+			updateReplyCount = pstmt2.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("updateReplycount Error:" + e);
+		} finally {
+			close(pstmt2);
+			close(rs);
+			close(pstmt);
+		}
+		return updateReplyCount;
 	}
 
 	public int updateReadCount(int boardNo) {
@@ -256,6 +291,7 @@ public class DAO {
 		PreparedStatement pstmt2 = null;
 		PreparedStatement pstmt3 = null;
 		PreparedStatement pstmt4 = null;
+		PreparedStatement pstmt5 = null;
 		ResultSet rs = null;
 		ResultSet rs2 = null;
 		ResultSet rs3 = null;
@@ -284,16 +320,16 @@ public class DAO {
 				pkNo = 1;
 			}
 
-			pstmt3 = conn.prepareStatement("select replyCount from reply where boardNo=" + boardNo);
+			pstmt3 = conn.prepareStatement("select max(replyCount) from reply where boardNo=" + boardNo);
 			rs3 = pstmt3.executeQuery();
 			if (rs3.next()) {
-				replyCount = rs3.getInt("replyCount") + 1;
+				replyCount = rs3.getInt(1) + 1;
 			} else {
 				replyCount = 1;
 			}
 
-			sql = "insert into reply(pkNo,boardNo,replyNo,content,name,replyCount) ";
-			sql += "values(?,?,?,?,?,?)";
+			sql = "insert into reply(pkNo,boardNo,replyNo,content,name,replyCount,id) ";
+			sql += "values(?,?,?,?,?,?,?)";
 			pstmt4 = conn.prepareStatement(sql);
 
 			pstmt4.setInt(1, pkNo);
@@ -302,6 +338,7 @@ public class DAO {
 			pstmt4.setString(4, replyArticle.getContent());
 			pstmt4.setString(5, replyArticle.getName());
 			pstmt4.setInt(6, replyCount);
+			pstmt4.setString(7, replyArticle.getId());
 
 			isSuccessReply = pstmt4.executeUpdate();
 
@@ -331,10 +368,15 @@ public class DAO {
 
 			while (rs.next()) {
 				ReplyBean replyBean = new ReplyBean();
+				replyBean.setPkNo(rs.getInt("pkNo"));
 				replyBean.setBoardNo(rs.getInt("boardNo"));
 				replyBean.setReplyNo(rs.getInt("replyNo"));
-				replyBean.setContent(rs.getString("content"));
+				String content = rs.getString("content");
+				content = content.replace("\r\n", "<br>");
+				content = content.replace(" ", "&nbsp;");
+				replyBean.setContent(content);
 				replyBean.setName(rs.getString("name"));
+				replyBean.setId(rs.getString("id"));
 				replyList.add(replyBean);
 			}
 		} catch (Exception e) {
@@ -346,7 +388,50 @@ public class DAO {
 		return replyList;
 	}
 
-	// �쉶�썝媛��엯 �떊泥� 紐⑸줉
+	public int deleteReply(int pkNo) {
+		PreparedStatement pstmt = null;
+		int isSuccessDeleteReply = 0;
+		String sql = "delete from reply where pkNo=?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, pkNo);
+			isSuccessDeleteReply = pstmt.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("deleteReply Error" + e);
+		} finally {
+			close(pstmt);
+		}
+		return isSuccessDeleteReply;
+	}
+
+	public User selectLoginUser(String id, String pwd) {
+		User loginUser = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			pstmt = conn.prepareStatement("select * from user where id=? and pwd=?");
+			pstmt.setString(1, id);
+			pstmt.setString(2, pwd);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				loginUser = new User();
+				loginUser.setName(rs.getString("name"));
+				loginUser.setId(rs.getString("id"));
+				loginUser.setPwd(rs.getString("pwd"));
+				loginUser.setEmail(rs.getString("email"));
+				loginUser.setAddr(rs.getString("addr"));
+				loginUser.setWho(rs.getString("who"));
+			}
+		} catch (Exception e) {
+			System.out.println("selectLoginUser Error: " + e);
+		} finally {
+			close(rs);
+			close(pstmt);
+		}
+		return loginUser;
+	}
+
 	public ArrayList<NewUser> confirmview() {
 		ArrayList<NewUser> list = new ArrayList<NewUser>();
 		PreparedStatement pstmt = null;
@@ -361,6 +446,9 @@ public class DAO {
 				NewUser user = new NewUser();
 				user.setName(rs.getString("name"));
 				user.setId(rs.getString("id"));
+				user.setPwd(rs.getString("pwd"));
+				user.setEmail(rs.getString("email"));
+				user.setAddr(rs.getString("addr"));
 				user.setWho(rs.getString("who"));
 				list.add(user);
 			}
@@ -422,9 +510,77 @@ public class DAO {
 		return newuser;
 	}
 
+	public User Selectoneiduser(String id) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		User user = null;
+		String sql = "select * from user where id=?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				user = new User();
+				user.setName(rs.getString("name"));
+				user.setId(rs.getString("id"));
+				user.setPwd(rs.getString("pwd"));
+				user.setEmail(rs.getString("email"));
+				user.setAddr(rs.getString("addr"));
+				user.setWho(rs.getString("who"));
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			close(rs);
+			close(pstmt);
+		}
+		return user;
+	}
+
 	public void MoveUser(NewUser newuser) {
 		PreparedStatement pstmt = null;
 		String sql = "insert into user(name,id,pwd,email,addr,who) values(?,?,?,?,?,?)";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, newuser.getName());
+			pstmt.setString(2, newuser.getId());
+			pstmt.setString(3, newuser.getPwd());
+			pstmt.setString(4, newuser.getEmail());
+			pstmt.setString(5, newuser.getAddr());
+			pstmt.setString(6, newuser.getWho());
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+	}
+
+	public void MoveUserBan(User user) {
+		PreparedStatement pstmt = null;
+		String sql = "insert into reject(name,id,pwd,email,addr,who) values(?,?,?,?,?,?)";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, user.getName());
+			pstmt.setString(2, user.getId());
+			pstmt.setString(3, user.getPwd());
+			pstmt.setString(4, user.getEmail());
+			pstmt.setString(5, user.getAddr());
+			pstmt.setString(6, user.getWho());
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+	}
+
+	public void MoveRejectUser(NewUser newuser) {
+		PreparedStatement pstmt = null;
+		String sql = "insert into reject(name,id,pwd,email,addr,who) values(?,?,?,?,?,?)";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, newuser.getName());
@@ -457,33 +613,19 @@ public class DAO {
 		}
 	}
 
-	public User selectLoginUser(String id, String pwd) {
-		User loginUser = null;
+	public void BanDoneMove(String id) {
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-
+		String sql = "delete from user where id=?";
 		try {
-			pstmt = conn.prepareStatement("select * from user where id=? and pwd=?");
+			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, id);
-			pstmt.setString(2, pwd);
-			rs = pstmt.executeQuery();
-
-			if (rs.next()) {
-				loginUser = new User();
-				loginUser.setName(rs.getString("name"));
-				loginUser.setId(rs.getString("id"));
-				loginUser.setPwd(rs.getString("pwd"));
-				loginUser.setEmail(rs.getString("email"));
-				loginUser.setAddr(rs.getString("addr"));
-				loginUser.setWho(rs.getString("who"));
-			}
+			pstmt.executeUpdate();
 		} catch (Exception e) {
-			System.out.println("selectLoginUser Error: " + e);
+			// TODO: handle exception
+			e.printStackTrace();
 		} finally {
-			close(rs);
 			close(pstmt);
 		}
-		return loginUser;
 	}
 
 	public ArrayList<User> AllUser() {
@@ -492,10 +634,10 @@ public class DAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = "select * from user";
+
 		try {
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
-
 			while (rs.next()) {
 				User user = new User();
 				user.setName(rs.getString("name"));
@@ -514,6 +656,162 @@ public class DAO {
 			close(pstmt);
 		}
 
+		return list;
+	}
+
+	public int countuser() {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "select count(*) from newuser";
+		int result = 0;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if (rs.next())
+				result = rs.getInt(1);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			close(rs);
+			close(pstmt);
+		}
+
+		return result;
+	}
+
+	public int countmanageuser() {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "select count(*) from user";
+		int result = 0;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if (rs.next())
+				result = rs.getInt(1);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			close(rs);
+			close(pstmt);
+		}
+
+		return result;
+	}
+
+	public int countmanagereject() {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "select count(*) from reject";
+		int result = 0;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if (rs.next())
+				result = rs.getInt(1);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			close(rs);
+			close(pstmt);
+		}
+
+		return result;
+	}
+
+	//////////
+	public Reject Selectbanuser(String id) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		Reject reject = null;
+		String sql = "select * from reject where id=?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				reject = new Reject();
+				reject.setName(rs.getString("name"));
+				reject.setId(rs.getString("id"));
+				reject.setPwd(rs.getString("pwd"));
+				reject.setEmail(rs.getString("email"));
+				reject.setAddr(rs.getString("addr"));
+				reject.setWho(rs.getString("who"));
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			close(rs);
+			close(pstmt);
+		}
+		return reject;
+	}
+
+	public void movetouser(Reject reject) {
+		PreparedStatement pstmt = null;
+		String sql = "insert into user(name,id,pwd,email,addr,who) values(?,?,?,?,?,?)";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, reject.getName());
+			pstmt.setString(2, reject.getId());
+			pstmt.setString(3, reject.getPwd());
+			pstmt.setString(4, reject.getEmail());
+			pstmt.setString(5, reject.getAddr());
+			pstmt.setString(6, reject.getWho());
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+	}
+
+	public void deleteBan(String id) {
+		PreparedStatement pstmt = null;
+		String sql = "delete from reject where id=?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+	}
+
+	public ArrayList<Reject> banlist() {
+		ArrayList<Reject> list = new ArrayList<Reject>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "select * from reject";
+
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				Reject reject = new Reject();
+				reject.setName(rs.getString("name"));
+				reject.setId(rs.getString("id"));
+				reject.setPwd(rs.getString("pwd"));
+				reject.setEmail(rs.getString("email"));
+				reject.setAddr(rs.getString("addr"));
+				reject.setWho(rs.getString("who"));
+				list.add(reject);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(rs);
+			close(pstmt);
+		}
 		return list;
 	}
 
