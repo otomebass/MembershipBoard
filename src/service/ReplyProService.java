@@ -28,12 +28,12 @@ public class ReplyProService {
 		return isWriteSuccess;
 	}
 
-	public void updateReplyCount(int boardNo) {
+	public void updateReplyCount(int boardNo, String boardReply) {
 		Connection conn = getConnection();
 		DAO dao = DAO.getInstance();
 		dao.setConnection(conn);
 
-		int isSuccessReply = dao.updateReplycount(boardNo);
+		int isSuccessReply = dao.updateReplycount(boardNo, boardReply);
 
 		if (isSuccessReply > 0) {
 			commit(conn);

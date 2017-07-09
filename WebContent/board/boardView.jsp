@@ -62,7 +62,7 @@
 			</tr>
 		</table>
 
-		<form action="replyPro.do?boardNo=${article.boardNo}" class="form-group" method="post">
+		<form action="replyPro.do?boardNo=${article.boardNo}&boardReply=plus" class="form-group" method="post">
 			<input type="hidden" name="page" value="${page }" />
 			<div class="table-responsible">
 				<table class="table table-hover table-bordered">
@@ -94,7 +94,7 @@
 										<div class="col-md-8">${reply.content }</div>
 										<div class="col-md-2">
 											<c:if test="${userId eq reply.id }">
-												<a href="replyDeletePro.do?pkNo=${reply.pkNo }&boardNo=${article.boardNo}&page=${page}" class="pull-right"><strong>삭제</strong></a>
+												<a href="replyDeletePro.do?pkNo=${reply.pkNo }&boardNo=${article.boardNo}&page=${page}&boardReply=minus" class="pull-right"><strong>삭제</strong></a>
 											</c:if>
 										</div>
 									</div>

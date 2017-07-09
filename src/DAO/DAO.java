@@ -121,7 +121,6 @@ public class DAO {
 		ResultSet rs = null;
 		int num = 0;
 		int insertCount = 0;
-		int replyCount = 0;
 		String sql = "";
 
 		try {
@@ -184,28 +183,24 @@ public class DAO {
 		return boardBean;
 	}
 
-	public int updateReplycount(int boardNo) {
+	public int updateReplycount(int boardNo, String boardReply) {
 		PreparedStatement pstmt = null;
-		PreparedStatement pstmt2 = null;
-		ResultSet rs = null;
-		int updateReplyCount = 0;
-		int replyCount = 0;
 		String sql = "";
+		int updateReplyCount = 0;
 		try {
-			pstmt = conn.prepareStatement("select max(replyCount) from reply where boardNo=" + boardNo);
-			rs = pstmt.executeQuery();
-			if (rs.next()) {
-				replyCount = rs.getInt(1) + 1;
-			} else {
-				replyCount = 1;
+
+			if (boardReply.equals("plus")) {
+				sql = "update board set replyCount=replyCount+1 where boardNo=" + boardNo;
 			}
-			pstmt2 = conn.prepareStatement("update board set replyCount=" + replyCount + " where boardNo=" + boardNo);
-			updateReplyCount = pstmt2.executeUpdate();
+			if (boardReply.equals("minus")) {
+				sql = "update board set replyCount=replyCount-1 where boardNo=" + boardNo;
+			}
+			pstmt = conn.prepareStatement(sql);
+			updateReplyCount = pstmt.executeUpdate();
+
 		} catch (Exception e) {
 			System.out.println("updateReplycount Error:" + e);
 		} finally {
-			close(pstmt2);
-			close(rs);
 			close(pstmt);
 		}
 		return updateReplyCount;
@@ -291,7 +286,6 @@ public class DAO {
 		PreparedStatement pstmt2 = null;
 		PreparedStatement pstmt3 = null;
 		PreparedStatement pstmt4 = null;
-		PreparedStatement pstmt5 = null;
 		ResultSet rs = null;
 		ResultSet rs2 = null;
 		ResultSet rs3 = null;
@@ -345,6 +339,7 @@ public class DAO {
 		} catch (Exception e) {
 			System.out.println("insertReply Error:" + e);
 		} finally {
+			close(pstmt4);
 			close(pstmt3);
 			close(rs2);
 			close(pstmt2);

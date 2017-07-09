@@ -20,10 +20,12 @@ public class ReplyProAction implements Action {
 		replyBean.setContent(request.getParameter("replyContent"));
 		replyBean.setName((String) session.getAttribute("userName"));
 		replyBean.setId((String) session.getAttribute("userId"));
+		String boardReply = request.getParameter("boardReply");
 
 		ReplyProService replyProService = new ReplyProService();
 		boolean isWriteSuccess = replyProService.registerReply(replyBean, boardNo);
-		replyProService.updateReplyCount(boardNo);
+
+		replyProService.updateReplyCount(boardNo, boardReply);
 		if (!isWriteSuccess) {
 			String pwChk = "replyWriteFalse";
 			request.setAttribute("pwChk", pwChk);
