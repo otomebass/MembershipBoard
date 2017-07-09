@@ -13,7 +13,7 @@ import javax.servlet.http.*;
 /**
  * Servlet Filter implementation class userInfoSession
  */
-@WebFilter("/*")
+@WebFilter("/boardList.do")
 public class LoginCheckFilter implements Filter {
 
 	/**

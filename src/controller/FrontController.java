@@ -23,7 +23,6 @@ public class FrontController extends HttpServlet {
 		String command = requestURI.substring(contextPath.length());
 		Path path = null;
 		Action action = null;
-
 		if (command.equals("/MainPage.do")) {
 			path = new Path();
 			path.setRedirect(true);
@@ -99,10 +98,8 @@ public class FrontController extends HttpServlet {
 			}
 
 		} else if (command.equals("/AdminPage.do")) {
-			/*
-			 * path = new Path(); path.setPath("/board/AdminPage.jsp");
-			 */
 			action = new AdminPageAction();
+			System.out.println("냥냥");
 			try {
 				path = action.execute(request, response);
 			} catch (Exception e) {
@@ -181,6 +178,21 @@ public class FrontController extends HttpServlet {
 				path = action.execute(request, response);
 			} catch (Exception e) {
 				// TODO: handle exception
+				e.printStackTrace();
+			}
+		} else if (command.equals("/DeleteUser.do")) {
+			action = new AdminDeleteUserAction();
+			try {
+				path = action.execute(request, response);
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		} else if (command.equals("/idCheck.do")) {
+			action = new IdCheckAction();
+			try {
+				path = action.execute(request, response);
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}

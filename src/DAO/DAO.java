@@ -59,34 +59,27 @@ public class DAO {
 		String sql = "";
 		ArrayList<BoardBean> articleList = new ArrayList<BoardBean>();
 		BoardBean board = null;
-		int startRow = (page - 1) * 10; // 紐� 踰덉㎏ 遺��꽣 �씫�뼱 �삱 寃껋씤媛�
+		int startRow = (page - 1) * 11; // 紐� 踰덉㎏ 遺��꽣 �씫�뼱 �삱 寃껋씤媛�
 
 		try {
 
 			if (sort.equals("readCount")) {
-				sql = "select * from board order by readCount desc limit ?,12";
+				sql = "select * from board order by readCount desc limit ?,11";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, startRow);
 			} else if (sort.equals("replyCount")) {
-				sql = "select * from board order by replyCount desc limit ?, 12";
-				/*
-				 * sql +=
-				 * "from board left outer join reply on board.boardNo=reply.boardNo "
-				 * ; sql +=
-				 * "group by board.boardNo order by max(replyCount) desc limit ?,12"
-				 * ;
-				 */
+				sql = "select * from board order by replyCount desc limit ?,11";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, startRow);
 			} else if (sort.equals("searchPro")) {
-				sql = "select * from board where name like ? or board.title like ? or board.content like ? limit ?,12";
+				sql = "select * from board where name like ? or board.title like ? or board.content like ? limit ?,11";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, "%" + search + "%");
 				pstmt.setString(2, "%" + search + "%");
 				pstmt.setString(3, "%" + search + "%");
 				pstmt.setInt(4, startRow);
 			} else {
-				sql = "select * from board order by boardNo desc limit ?,12";
+				sql = "select * from board order by boardNo desc limit ?,11";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, startRow);
 			}
@@ -307,9 +300,10 @@ public class DAO {
 
 			pstmt2 = conn.prepareStatement("select max(pKNo) from reply");
 			rs2 = pstmt2.executeQuery();
-
+			System.out.println(pkNo);
 			if (rs2.next()) {
 				pkNo = rs2.getInt(1) + 1;
+				System.out.println(pkNo);
 			} else {
 				pkNo = 1;
 			}
@@ -457,7 +451,8 @@ public class DAO {
 	}
 
 	// �쉶�썝媛��엯
-	public void New(NewUser newuser) {
+	public int New(NewUser newuser) {
+		int isJoinSuccess = 0;
 		PreparedStatement pstmt = null;
 		String sql = "insert into newuser(name,id,pwd,email,addr,who) values(?,?,?,?,?,?)";
 		try {
@@ -468,13 +463,14 @@ public class DAO {
 			pstmt.setString(4, newuser.getEmail());
 			pstmt.setString(5, newuser.getAddr());
 			pstmt.setString(6, newuser.getWho());
-			pstmt.executeUpdate();
+			isJoinSuccess = pstmt.executeUpdate();
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		} finally {
 			close(pstmt);
 		}
+		return isJoinSuccess;
 	}
 
 	public NewUser SelectOneid(String id) {
@@ -810,4 +806,43 @@ public class DAO {
 		return list;
 	}
 
+	public int deleteUser(String id) {
+		PreparedStatement pstmt = null;
+		int isDeleteUser = 0;
+		String sql = "delete from reject where id = ?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			isDeleteUser = pstmt.executeUpdate();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		return isDeleteUser;
+	}
+
+	public int idCheck(String id) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int idCheck = 0;
+		String sql = "select id from user where id=? union ";
+		sql += "select id from newuser where id=?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setString(2, id);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				idCheck = 1;
+			}
+		} catch (Exception e) {
+			System.out.println(" idCheck Error:" + e);
+		} finally {
+			close(rs);
+			close(pstmt);
+		}
+		return idCheck;
+	}
 }

@@ -10,13 +10,13 @@ import VO.NewUser;
 
 public class NewUserService {
 
-	public void insert(NewUser newuser) throws Exception {
+	public int insert(NewUser newuser) throws Exception {
 		Connection conn = getConnection();
 		DAO dao = DAO.getInstance();
 		dao.setConnection(conn);
-		dao.New(newuser);
+		int isJoinSuccess = dao.New(newuser);
 		conn.commit();
 		close(conn);
+		return isJoinSuccess;
 	}
 }
-   

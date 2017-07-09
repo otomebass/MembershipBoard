@@ -90,9 +90,9 @@
 							<tr>
 								<td>
 									<div class="row">
-										<div class="col-md-2">${reply.name }</div>
-										<div class="col-md-8">${reply.content }</div>
-										<div class="col-md-2">
+										<div class="col-md-1">${reply.name }&nbsp;님</div>
+										<div class="col-md-9">${reply.content }</div>
+										<div class="col-md-1 pull-right">
 											<c:if test="${userId eq reply.id }">
 												<a href="replyDeletePro.do?pkNo=${reply.pkNo }&boardNo=${article.boardNo}&page=${page}&boardReply=minus" class="pull-right"><strong>삭제</strong></a>
 											</c:if>
