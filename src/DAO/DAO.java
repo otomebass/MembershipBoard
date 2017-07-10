@@ -31,14 +31,25 @@ public class DAO {
 	}
 
 	// 湲��쓽 媛쒖닔 援ы븯湲�
-	public int selectListCount() {
+	public int selectListCount(String sort, String search) {
 		int listCount = 0;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String sql = "select count(*) from board";
+		String sql = "";
+
 		try {
-			pstmt = conn.prepareStatement(sql);
-			rs = pstmt.executeQuery();
+			if (sort.equals("searchPro")) {
+				sql = "select count(*) from board where name like ? or title like ? or content like ?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, "%" + search + "%");
+				pstmt.setString(2, "%" + search + "%");
+				pstmt.setString(3, "%" + search + "%");
+				rs = pstmt.executeQuery();
+			} else {
+				sql = "select count(*) from board";
+				pstmt = conn.prepareStatement(sql);
+				rs = pstmt.executeQuery();
+			}
 
 			if (rs.next())
 				listCount = rs.getInt(1);
@@ -72,7 +83,7 @@ public class DAO {
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, startRow);
 			} else if (sort.equals("searchPro")) {
-				sql = "select * from board where name like ? or board.title like ? or board.content like ? limit ?,11";
+				sql = "select * from board where name like ? or title like ? or content like ? limit ?,11";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, "%" + search + "%");
 				pstmt.setString(2, "%" + search + "%");
@@ -138,7 +149,7 @@ public class DAO {
 
 			insertCount = pstmt2.executeUpdate();
 		} catch (Exception e) {
-			System.out.println("insertArticle Error" + e);
+			System.out.println("insertArticle Error: " + e);
 		} finally {
 			close(pstmt2);
 			close(rs);
@@ -192,7 +203,7 @@ public class DAO {
 			updateReplyCount = pstmt.executeUpdate();
 
 		} catch (Exception e) {
-			System.out.println("updateReplycount Error:" + e);
+			System.out.println("updateReplycount Error: " + e);
 		} finally {
 			close(pstmt);
 		}
@@ -228,7 +239,7 @@ public class DAO {
 			pstmt.setInt(3, article.getBoardNo());
 			updateCount = pstmt.executeUpdate();
 		} catch (Exception e) {
-			System.out.println("updateArticle Error" + e);
+			System.out.println("updateArticle Error: " + e);
 		} finally {
 			close(pstmt);
 		}
@@ -266,7 +277,7 @@ public class DAO {
 			}
 
 		} catch (Exception e) {
-			System.out.println("replyCount Error:" + e);
+			System.out.println("replyCount Error: " + e);
 		} finally {
 			close(rs);
 			close(pstmt);
@@ -300,10 +311,8 @@ public class DAO {
 
 			pstmt2 = conn.prepareStatement("select max(pKNo) from reply");
 			rs2 = pstmt2.executeQuery();
-			System.out.println(pkNo);
 			if (rs2.next()) {
 				pkNo = rs2.getInt(1) + 1;
-				System.out.println(pkNo);
 			} else {
 				pkNo = 1;
 			}
@@ -331,7 +340,7 @@ public class DAO {
 			isSuccessReply = pstmt4.executeUpdate();
 
 		} catch (Exception e) {
-			System.out.println("insertReply Error:" + e);
+			System.out.println("insertReply Error: " + e);
 		} finally {
 			close(pstmt4);
 			close(pstmt3);
@@ -369,7 +378,7 @@ public class DAO {
 				replyList.add(replyBean);
 			}
 		} catch (Exception e) {
-			System.out.println("selectReplyList Error:" + e);
+			System.out.println("selectReplyList Error: " + e);
 		} finally {
 			close(rs);
 			close(pstmt);
@@ -386,7 +395,7 @@ public class DAO {
 			pstmt.setInt(1, pkNo);
 			isSuccessDeleteReply = pstmt.executeUpdate();
 		} catch (Exception e) {
-			System.out.println("deleteReply Error" + e);
+			System.out.println("deleteReply Error: " + e);
 		} finally {
 			close(pstmt);
 		}
@@ -442,7 +451,7 @@ public class DAO {
 				list.add(user);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("confirmview Error: " + e);
 		} finally {
 			close(rs);
 			close(pstmt);
@@ -465,7 +474,7 @@ public class DAO {
 			pstmt.setString(6, newuser.getWho());
 			isJoinSuccess = pstmt.executeUpdate();
 		} catch (Exception e) {
-			// TODO: handle exception
+			System.out.println("New Error: " + e);
 			e.printStackTrace();
 		} finally {
 			close(pstmt);
@@ -492,7 +501,7 @@ public class DAO {
 				newuser.setWho(rs.getString("who"));
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			System.out.println("SelectOneid Error: " + e);
 			e.printStackTrace();
 		} finally {
 			close(rs);
@@ -520,7 +529,7 @@ public class DAO {
 				user.setWho(rs.getString("who"));
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			System.out.println("Selectoneiduser Error: " + e);
 			e.printStackTrace();
 		} finally {
 			close(rs);
@@ -529,9 +538,10 @@ public class DAO {
 		return user;
 	}
 
-	public void MoveUser(NewUser newuser) {
+	public int MoveUser(NewUser newuser) {
 		PreparedStatement pstmt = null;
 		String sql = "insert into user(name,id,pwd,email,addr,who) values(?,?,?,?,?,?)";
+		int isMoveUser = 0;
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, newuser.getName());
@@ -540,18 +550,20 @@ public class DAO {
 			pstmt.setString(4, newuser.getEmail());
 			pstmt.setString(5, newuser.getAddr());
 			pstmt.setString(6, newuser.getWho());
-			pstmt.executeUpdate();
+			isMoveUser = pstmt.executeUpdate();
 		} catch (Exception e) {
-			// TODO: handle exception
+			System.out.println("MoveUser Error: " + e);
 			e.printStackTrace();
 		} finally {
 			close(pstmt);
 		}
+		return isMoveUser;
 	}
 
-	public void MoveUserBan(User user) {
+	public int MoveUserBan(User user) {
 		PreparedStatement pstmt = null;
 		String sql = "insert into reject(name,id,pwd,email,addr,who) values(?,?,?,?,?,?)";
+		int isMoveUserBan = 0;
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, user.getName());
@@ -560,18 +572,20 @@ public class DAO {
 			pstmt.setString(4, user.getEmail());
 			pstmt.setString(5, user.getAddr());
 			pstmt.setString(6, user.getWho());
-			pstmt.executeUpdate();
+			isMoveUserBan = pstmt.executeUpdate();
 		} catch (Exception e) {
-			// TODO: handle exception
+			System.out.println("MoveUserBan Error: " + e);
 			e.printStackTrace();
 		} finally {
 			close(pstmt);
 		}
+		return isMoveUserBan;
 	}
 
-	public void MoveRejectUser(NewUser newuser) {
+	public int MoveRejectUser(NewUser newuser) {
 		PreparedStatement pstmt = null;
 		String sql = "insert into reject(name,id,pwd,email,addr,who) values(?,?,?,?,?,?)";
+		int isMoveRejectUser = 0;
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, newuser.getName());
@@ -580,43 +594,48 @@ public class DAO {
 			pstmt.setString(4, newuser.getEmail());
 			pstmt.setString(5, newuser.getAddr());
 			pstmt.setString(6, newuser.getWho());
-			pstmt.executeUpdate();
+			isMoveRejectUser = pstmt.executeUpdate();
 		} catch (Exception e) {
-			// TODO: handle exception
+			System.out.println("MoveRejectUser Error: " + e);
 			e.printStackTrace();
 		} finally {
 			close(pstmt);
 		}
+		return isMoveRejectUser;
 	}
 
-	public void DoneMove(String id) {
+	public int DoneMove(String id) {
 		PreparedStatement pstmt = null;
 		String sql = "delete from newuser where id=?";
+		int isDoneMove = 0;
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, id);
-			pstmt.executeUpdate();
+			isDoneMove = pstmt.executeUpdate();
 		} catch (Exception e) {
-			// TODO: handle exception
+			System.out.println("DoneMove Error: " + e);
 			e.printStackTrace();
 		} finally {
 			close(pstmt);
 		}
+		return isDoneMove;
 	}
 
-	public void BanDoneMove(String id) {
+	public int BanDoneMove(String id) {
 		PreparedStatement pstmt = null;
 		String sql = "delete from user where id=?";
+		int isBanDoneMove = 0;
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, id);
-			pstmt.executeUpdate();
+			isBanDoneMove = pstmt.executeUpdate();
 		} catch (Exception e) {
-			// TODO: handle exception
+			System.out.println("BanDoneMove Error: " + e);
 			e.printStackTrace();
 		} finally {
 			close(pstmt);
 		}
+		return isBanDoneMove;
 	}
 
 	public ArrayList<User> AllUser() {
@@ -640,7 +659,7 @@ public class DAO {
 				list.add(user);
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			System.out.println("AllUser Error: " + e);
 			e.printStackTrace();
 		} finally {
 			close(rs);
@@ -661,7 +680,7 @@ public class DAO {
 			if (rs.next())
 				result = rs.getInt(1);
 		} catch (Exception e) {
-			// TODO: handle exception
+			System.out.println("countuser Error: " + e);
 			e.printStackTrace();
 		} finally {
 			close(rs);
@@ -682,7 +701,7 @@ public class DAO {
 			if (rs.next())
 				result = rs.getInt(1);
 		} catch (Exception e) {
-			// TODO: handle exception
+			System.out.println("countmanageuser Error: " + e);
 			e.printStackTrace();
 		} finally {
 			close(rs);
@@ -703,7 +722,7 @@ public class DAO {
 			if (rs.next())
 				result = rs.getInt(1);
 		} catch (Exception e) {
-			// TODO: handle exception
+			System.out.println("countmanagereject Error:" + e);
 			e.printStackTrace();
 		} finally {
 			close(rs);
@@ -733,7 +752,7 @@ public class DAO {
 				reject.setWho(rs.getString("who"));
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			System.out.println("Selectbanuser Error: " + e);
 			e.printStackTrace();
 		} finally {
 			close(rs);
@@ -742,9 +761,10 @@ public class DAO {
 		return reject;
 	}
 
-	public void movetouser(Reject reject) {
+	public int movetouser(Reject reject) {
 		PreparedStatement pstmt = null;
 		String sql = "insert into user(name,id,pwd,email,addr,who) values(?,?,?,?,?,?)";
+		int isMovetoUser = 0;
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, reject.getName());
@@ -753,28 +773,31 @@ public class DAO {
 			pstmt.setString(4, reject.getEmail());
 			pstmt.setString(5, reject.getAddr());
 			pstmt.setString(6, reject.getWho());
-			pstmt.executeUpdate();
+			isMovetoUser = pstmt.executeUpdate();
 		} catch (Exception e) {
-			// TODO: handle exception
+			System.out.println("movetouser Error: " + e);
 			e.printStackTrace();
 		} finally {
 			close(pstmt);
 		}
+		return isMovetoUser;
 	}
 
-	public void deleteBan(String id) {
+	public int deleteBan(String id) {
 		PreparedStatement pstmt = null;
 		String sql = "delete from reject where id=?";
+		int isDeleteBan = 0;
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, id);
-			pstmt.executeUpdate();
+			isDeleteBan = pstmt.executeUpdate();
 		} catch (Exception e) {
-			// TODO: handle exception
+			System.out.println("deleteBan Error: " + e);
 			e.printStackTrace();
 		} finally {
 			close(pstmt);
 		}
+		return isDeleteBan;
 	}
 
 	public ArrayList<Reject> banlist() {
@@ -798,6 +821,7 @@ public class DAO {
 				list.add(reject);
 			}
 		} catch (Exception e) {
+			System.out.println("banlist Error: " + e);
 			e.printStackTrace();
 		} finally {
 			close(rs);
@@ -815,7 +839,7 @@ public class DAO {
 			pstmt.setString(1, id);
 			isDeleteUser = pstmt.executeUpdate();
 		} catch (Exception e) {
-			// TODO: handle exception
+			System.out.println("deleteUser Error: " + e);
 			e.printStackTrace();
 		} finally {
 			close(pstmt);
@@ -838,7 +862,7 @@ public class DAO {
 				idCheck = 1;
 			}
 		} catch (Exception e) {
-			System.out.println(" idCheck Error:" + e);
+			System.out.println(" idCheck Error: " + e);
 		} finally {
 			close(rs);
 			close(pstmt);

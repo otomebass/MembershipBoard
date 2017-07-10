@@ -15,7 +15,6 @@ public class AdminPageAction implements Action {
 		Path path = new Path();
 		path.setPath("/board/AdminPage.jsp");
 		int i, j, k;
-		System.out.println("냥냥");
 		AdminPageService aps = new AdminPageService();
 		i = aps.waituser();
 		j = aps.manageuser();

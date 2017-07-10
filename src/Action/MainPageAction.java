@@ -11,7 +11,7 @@ public class MainPageAction implements Action {
 	public Path execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
 		Path path = new Path();
-		path.setPath("/board/MainPage.jsp");
+		path.setPath("/board/index.jsp");
 		
 		return path;
 	}

@@ -26,7 +26,7 @@ public class FrontController extends HttpServlet {
 		if (command.equals("/MainPage.do")) {
 			path = new Path();
 			path.setRedirect(true);
-			path.setPath(request.getContextPath() + "/MainPage.jsp");
+			path.setPath(request.getContextPath() + "/index.jsp");
 		} else if (command.equals("/boardList.do")) {
 			action = new BoardListAction();
 			try {
@@ -99,7 +99,6 @@ public class FrontController extends HttpServlet {
 
 		} else if (command.equals("/AdminPage.do")) {
 			action = new AdminPageAction();
-			System.out.println("냥냥");
 			try {
 				path = action.execute(request, response);
 			} catch (Exception e) {

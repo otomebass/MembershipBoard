@@ -10,12 +10,12 @@ import VO.*;
 
 public class BoardListService {
 
-	public int getListCount() throws Exception {
+	public int getListCount(String sort,String search) throws Exception {
 		int listCount = 0;
 		Connection conn = getConnection();
 		DAO dao = DAO.getInstance();
 		dao.setConnection(conn);
-		listCount = dao.selectListCount();
+		listCount = dao.selectListCount(sort,search);
 		close(conn);
 		return listCount;
 	}

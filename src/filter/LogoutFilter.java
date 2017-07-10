@@ -36,7 +36,7 @@ public class LogoutFilter implements Filter {
 		session.invalidate();
 
 		HttpServletResponse response = (HttpServletResponse) res;
-		response.sendRedirect("/boardProject/MainPage.jsp?pwChk=logout");
+		response.sendRedirect("/boardProject/index.jsp?pwChk=logout");
 
 		chain.doFilter(request, response);
 	}

@@ -29,10 +29,10 @@ public class NewUserAction implements Action {
 
 		if (isJoinSuccess > 0) {
 			path = new Path();
-			path.setPath("/MainPage.jsp?pwChk=join");
+			path.setPath("/index.jsp?pwChk=join");
 		} else {
 			path = new Path();
-			path.setPath("/MainPage.jsp?pwChk=joinFalse");
+			path.setPath("/index.jsp?pwChk=joinFalse");
 		}
 
 		return path;

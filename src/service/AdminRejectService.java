@@ -1,12 +1,10 @@
 package service;
 
-import static DB.DB.close;
-import static DB.DB.commit;
-import static DB.DB.getConnection;
+import static DB.DB.*;
 
-import java.sql.Connection;
+import java.sql.*;
 
-import DAO.DAO;
+import DAO.*;
 
 public class AdminRejectService {
 
@@ -15,10 +13,20 @@ public class AdminRejectService {
 		DAO dao = DAO.getInstance();
 		dao.setConnection(conn);
 
-		dao.MoveRejectUser(dao.SelectOneid(id));
-		dao.DoneMove(id);
+		int isSuccessMove = dao.MoveRejectUser(dao.SelectOneid(id));
+		if (isSuccessMove > 0) {
+			commit(conn);
+			close(conn);
+		} else {
+			rollback(conn);
+		}
 
-		commit(conn);
-		close(conn);
+		int isSuccessDone = dao.DoneMove(id);
+		if (isSuccessDone > 0) {
+			commit(conn);
+			close(conn);
+		} else {
+			rollback(conn);
+		}
 	}
 }

@@ -30,7 +30,7 @@ public class LoginProAction implements Action {
 			} else {
 				String pwChk = "loginFalse";
 				request.setAttribute("pwChk", pwChk);
-				path.setPath("MainPage.jsp?pwChk=" + pwChk);
+				path.setPath("index.jsp?pwChk=" + pwChk);
 			}
 		}
 		return path;
