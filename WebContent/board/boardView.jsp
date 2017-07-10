@@ -20,8 +20,8 @@
 
 	<jsp:include page="header.jsp" />
 
-	<c:if test="${not empty pwChk}">
 
+	<c:if test="${not empty pwChk  || not empty param.pwChk}">
 		<jsp:include page="alert.jsp" />
 	</c:if>
 
@@ -62,7 +62,7 @@
 			</tr>
 		</table>
 
-		<form action="replyPro.do?boardNo=${article.boardNo}" class="form-group" method="post">
+		<form action="replyPro.do?boardNo=${article.boardNo}&boardReply=plus" class="form-group" method="post">
 			<input type="hidden" name="page" value="${page }" />
 			<div class="table-responsible">
 				<table class="table table-hover table-bordered">
@@ -90,8 +90,13 @@
 							<tr>
 								<td>
 									<div class="row">
-										<div class="col-md-2">${reply.name }</div>
-										<div class="col-me-10">${reply.content }</div>
+										<div class="col-md-1">${reply.name }&nbsp;님</div>
+										<div class="col-md-9">${reply.content }</div>
+										<div class="col-md-1 pull-right">
+											<c:if test="${userId eq reply.id }">
+												<a href="replyDeletePro.do?pkNo=${reply.pkNo }&boardNo=${article.boardNo}&page=${page}&boardReply=minus" class="pull-right"><strong>삭제</strong></a>
+											</c:if>
+										</div>
 									</div>
 								</td>
 							</tr>

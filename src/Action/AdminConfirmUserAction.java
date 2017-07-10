@@ -18,10 +18,17 @@ public class AdminConfirmUserAction implements Action {
 		Path path = new Path();
 		path.setPath("/board/AdminConfirmUser.jsp");
 		
+		int page = 1; 
+		int limit = 10;
+		if (request.getParameter("page") != null) {
+			page = Integer.parseInt(request.getParameter("page"));
+		}
+		
+		
 		AdminConfirmService acs = new AdminConfirmService();
 		request.setAttribute("newuser", acs.confirm());
 		return path;
 	}
 
-}
- 
+}   
+    

@@ -1,4 +1,4 @@
-package filter;
+package filter; 
 
 import java.io.IOException;
 import javax.servlet.Filter;
@@ -23,14 +23,14 @@ public class CharacterEncodingFilter implements Filter {
 	public CharacterEncodingFilter() {
 	}
 
-	/**
+	/** 
 	 * @see Filter#destroy()
 	 */
 	public void destroy() {
 		// TODO Auto-generated method stub
 	}
 
-	/** 
+	/**  
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {

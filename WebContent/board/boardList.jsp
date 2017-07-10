@@ -15,7 +15,6 @@
 <body>
 
 	<jsp:include page="header.jsp" />
-
 	<div class="container">
 
 		<div class="row">
@@ -46,7 +45,7 @@
 		<div class="table-responsive">
 			<table class="table table-hover table-striped">
 
-				<tr id="trTop">
+				<tr>
 					<th class="col-md-1 text-center">번호</th>
 					<th class="col-md-5 text-center">제목</th>
 					<th class="col-md-2 text-center">글쓴이</th>
@@ -59,7 +58,7 @@
 						<tr>
 							<td class="col-md-1 text-center">${article.boardNo }</td>
 							<td class="col-md-5">
-								<a href="boardDetail.do?boardNo=${article.boardNo }&page=${page}"> ${article.title }</a>
+								<a href="boardDetail.do?boardNo=${article.boardNo }&page=${page}">${article.title }&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge">${article.replyCount } </span></a>
 							</td>
 							<td class="col-md-2 text-center">${article.name }</td>
 
@@ -85,8 +84,8 @@
 			<div class="col-md-1"></div>
 			<div class="col-md-11">
 				<div class="form-group pull-right">
-					<form action="boardList.do?page=${page }&sort=searchPro" method="post" class="form-inline">
-						<button class="btn btn-danger pull-right" type="button" onclick="location.href='boardList.do?page=${page}'">
+					<form action="boardList.do?page=1&sort=searchPro" method="post" class="form-inline">
+						<button class="btn btn-danger pull-right" type="button" onclick="location.href='boardList.do?page=1'">
 							<strong>목록</strong>
 						</button>
 						<button class="btn btn-danger pull-right" type="submit">
@@ -100,14 +99,13 @@
 			</div>
 		</div>
 
-
 		<ul class="pagination">
 			<c:choose>
 				<c:when test="${pageInfo.page<=1}">
 					<li><span style="text-color: black;">&laquo;</span></li>
 				</c:when>
 				<c:otherwise>
-					<li><a href="boardList.do?page=${pageInfo.page-1 }"><span style="text-color: black;">&laquo;</span></a></li>
+					<li><a href="boardList.do?page=${pageInfo.page-1 }&sort=${sort}&search=${search}"><span style="text-color: black;">&laquo;</span></a></li>
 				</c:otherwise>
 			</c:choose>
 
@@ -117,7 +115,21 @@
 						<li class="active"><span style="text-color: white; background-color: black;">${pageInfo.page }</span></li>
 					</c:when>
 					<c:otherwise>
-						<li><a href="boardList.do?page=${pNo }"><span style="text-color: black;">${pNo }</span></a></li>
+
+						<c:choose>
+							<c:when test="${sort eq 'searchPro' }">
+								<li><a href="boardList.do?page=${pNo }&sort=searchPro&search=${search}"><span style="text-color: black;">${pNo }</span></a></li>
+							</c:when>
+							<c:when test="${sort eq 'readCount' }">
+								<li><a href="boardList.do?page=${pNo }&sort=readCount"><span style="text-color: black;">${pNo }</span></a></li>
+							</c:when>
+							<c:when test="${sort eq 'replyCount' }">
+								<li><a href="boardList.do?page=${pNo }&sort=replyCount"><span style="text-color: black;">${pNo }</span></a></li>
+							</c:when>
+							<c:otherwise>
+								<li><a href="boardList.do?page=${pNo }"><span style="text-color: black;">${pNo }</span></a></li>
+							</c:otherwise>
+						</c:choose>
 					</c:otherwise>
 				</c:choose>
 			</c:forEach>
@@ -127,7 +139,7 @@
 					<li><span style="text-color: black;">&raquo;</span></li>
 				</c:when>
 				<c:otherwise>
-					<li><a href="boardList.do?page=${pageInfo.page+1 }"><span style="text-color: black;">&raquo;</span></a></li>
+					<li><a href="boardList.do?page=${pageInfo.page+1 }&sort=${sort}&search=${search}"><span style="text-color: black;">&raquo;</span></a></li>
 				</c:otherwise>
 			</c:choose>
 		</ul>

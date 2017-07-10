@@ -10,12 +10,12 @@ import VO.*;
 
 public class BoardListService {
 
-	public int getListCount() throws Exception {
+	public int getListCount(String sort,String search) throws Exception {
 		int listCount = 0;
 		Connection conn = getConnection();
 		DAO dao = DAO.getInstance();
 		dao.setConnection(conn);
-		listCount = dao.selectListCount();
+		listCount = dao.selectListCount(sort,search);
 		close(conn);
 		return listCount;
 	}
@@ -29,15 +29,6 @@ public class BoardListService {
 		close(conn);
 		return articleList;
 
-	}
-
-	public int getReplyCount(int boardNo) {
-		Connection conn = getConnection();
-		DAO dao = DAO.getInstance();
-		dao.setConnection(conn);
-		int getReplyCount = dao.replyCount(boardNo);
-
-		return getReplyCount;
 	}
 
 }

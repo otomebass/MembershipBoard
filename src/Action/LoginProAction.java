@@ -14,18 +14,24 @@ public class LoginProAction implements Action {
 		String pwd = request.getParameter("pwd");
 		LoginService loginService = new LoginService();
 		User loginUser = loginService.getLoginUser(id, pwd);
-		// 성공하면 객체 넘어오고, 실패하면 널
-		if (loginUser != null) {
-			HttpSession session = request.getSession();
-			session.setAttribute("userId", id);
-			session.setAttribute("userPwd", pwd);
-			session.setAttribute("userName", loginUser.getName());
-			path.setPath("boardList.do");
- 
+
+		if (id.equals("admin") && pwd.equals("admin")) {
+			path = new Path();
+			path.setPath("AdminPage.do");
 		} else {
-			String pwChk = "loginFalse";
-			request.setAttribute("pwChk", pwChk);
-			path.setPath("MainPage.jsp?pwChk=" + pwChk);
+			// 성공하면 객체 넘어오고, 실패하면 널
+			if (loginUser != null) {
+				HttpSession session = request.getSession();
+				session.setAttribute("userId", id);
+				session.setAttribute("userPwd", pwd);
+				session.setAttribute("userName", loginUser.getName());
+				path.setPath("boardList.do");
+
+			} else {
+				String pwChk = "loginFalse";
+				request.setAttribute("pwChk", pwChk);
+				path.setPath("index.jsp?pwChk=" + pwChk);
+			}
 		}
 		return path;
 	}

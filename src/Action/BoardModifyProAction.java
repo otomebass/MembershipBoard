@@ -12,6 +12,7 @@ public class BoardModifyProAction implements Action {
 	@Override
 	public Path execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		Path path = null;
+		String pwChk = "";
 		boolean isModifySuccess = false;
 		int boardNo = Integer.parseInt(request.getParameter("boardNo"));
 		String page = request.getParameter("page");
@@ -20,9 +21,9 @@ public class BoardModifyProAction implements Action {
 		String password = request.getParameter("password");
 		BoardBean article = new BoardBean();
 		BoardModifyProService boardModifyProService = new BoardModifyProService();
- 
+
 		if (!password.equals(userPwd)) {
-			String pwChk = "pwFalse";
+			pwChk = "pwFalse";
 			request.setAttribute("pwChk", pwChk);
 			path = new Path();
 			path.setPath("boardModifyForm.do?pwChk=" + pwChk);
@@ -33,14 +34,15 @@ public class BoardModifyProAction implements Action {
 			isModifySuccess = boardModifyProService.modifyArticle(article);
 
 			if (!isModifySuccess) {
-				String pwChk = "modifyFalse";
+				pwChk = "modifyFalse";
 				request.setAttribute("pwChk", pwChk);
 				path = new Path();
 				path.setPath("boardModifyForm.do?pwChk=" + pwChk);
 			} else {
+				pwChk = "";
 				path = new Path();
 				request.setAttribute("page", page);
-				path.setPath("boardDetail.do?boardNo=" + article.getBoardNo());
+				path.setPath("boardDetail.do?boardNo=" + article.getBoardNo() + "&pwChk=" + pwChk);
 			}
 		}
 		return path;

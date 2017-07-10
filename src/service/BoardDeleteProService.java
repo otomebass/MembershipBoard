@@ -22,9 +22,9 @@ public class BoardDeleteProService {
 		} else {
 			rollback(conn);
 		}
-
+ 
 		close(conn);
 		return isDeleteSuccess;
 	}
 }
- 
+   

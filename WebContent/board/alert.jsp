@@ -92,6 +92,43 @@
 									<h3>Love & Peace</h3>
 								</div>
 							</c:when>
+							<c:when test="${pwChk eq 'joinFalse' }">
+								<h4 class="modal-title" id="myModalLabel">회원가입 실패</h4>
+								<div class="modal-body">
+									<h3 style="color: red;">회원가입에 실패하였습니다</h3>
+									<h3 style="color: red;">ID 중복체크를 실행해 주세요</h3>
+									<h3 style="color: red;">ID 중복체크에 이상이 없다면</h3>
+									<h3 style="color: red;">관리자에게 문의 바랍니다</h3>
+									<h3 style="color: red;">190otomebass.gen@gamil.com</h3>
+								</div>
+							</c:when>
+							<c:when test="${pwChk eq 'successDeleteReply' }">
+								<h4 class="modal-title" id="myModalLabel">댓글 삭제 성공</h4>
+								<div class="modal-body">
+									<h3 style="color: red;">댓글을 삭제하였습니다</h3>
+								</div>
+							</c:when>
+							<c:when test="${pwChk eq 'falseDeleteReply' }">
+								<h4 class="modal-title" id="myModalLabel">댓글 삭제 실패</h4>
+								<div class="modal-body">
+									<h3 style="color: red;">댓글 삭제에 실패하였습니다</h3>
+								</div>
+							</c:when>
+							<c:when test="${pwChk eq 'idCheckNot' }">
+								<h4 class="modal-title" id="myModalLabel">ID 중복체크</h4>
+								<div class="modal-body">
+									<h3 style="color: red;">이미 존재하는 ID 입니다</h3>
+									<h3 style="color: red;">다른 ID를 선택해 주세요</h3>
+								</div>
+								
+							</c:when>
+							<c:when test="${pwChk eq 'idCheckOk' }">
+								<h4 class="modal-title" id="myModalLabel">ID 중복체크</h4>
+								<div class="modal-body">
+									<h3 style="color: red;">사용하실 수 있는 ID입니다</h3>
+									<h3 style="color: red;">회원가입을 진행해 주세요</h3>
+								</div>
+							</c:when>
 						</c:choose>
 					</div>
 					<div class="modal-footer">

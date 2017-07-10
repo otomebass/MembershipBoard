@@ -10,6 +10,15 @@ public class BoardBean {
 	private int readCount;
 	private Date boardDate;
 	private String name;
+	int replyCount;	
+
+	public int getReplyCount() {
+		return replyCount;
+	}
+
+	public void setReplyCount(int replyCount) {
+		this.replyCount = replyCount;
+	}
 
 	public String getName() {
 		return name;

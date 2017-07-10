@@ -8,7 +8,7 @@
 		driverClassName="com.mysql.jdbc.Driver"
 		factory="org.apache.tomcat.dbcp.dbcp2.BasicDataSourceFactory"
 		url="jdbc:mysql://localhost:3306/boardProject"
-		maxActive="500"
+		maxTotal="500"
 		maxIdel="100"
 	/>
 </Context>

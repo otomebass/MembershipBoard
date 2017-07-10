@@ -13,8 +13,8 @@ public class NewUserAction implements Action {
 	@Override
 	public Path execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
-		Path path = new Path();
-		path.setPath("/MainPage.jsp?pwChk=join");
+		Path path = null;
+
 		NewUser newuser = new NewUser();
 
 		newuser.setName(request.getParameter("name"));
@@ -25,7 +25,15 @@ public class NewUserAction implements Action {
 		newuser.setWho(request.getParameter("who"));
 
 		NewUserService newuserservice = new NewUserService();
-		newuserservice.insert(newuser);
+		int isJoinSuccess = newuserservice.insert(newuser);
+
+		if (isJoinSuccess > 0) {
+			path = new Path();
+			path.setPath("/index.jsp?pwChk=join");
+		} else {
+			path = new Path();
+			path.setPath("/index.jsp?pwChk=joinFalse");
+		}
 
 		return path;
 	}

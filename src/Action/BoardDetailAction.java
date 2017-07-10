@@ -1,4 +1,4 @@
-package Action;
+package Action;   
 
 import java.util.*;
 
@@ -19,7 +19,7 @@ public class BoardDetailAction implements Action {
 		BoardBean article = boardDetailService.getArticle(boardNo);
 		replyList = boardDetailService.getReplyList(boardNo);
 		int successReplyCount = boardDetailService.getReplyCount(boardNo);
-
+ 
 		Path path = new Path();
 		request.setAttribute("replyCount", successReplyCount);
 		request.setAttribute("page", page);
@@ -29,5 +29,5 @@ public class BoardDetailAction implements Action {
 
 		return path;
 	}
-
+ 
 }

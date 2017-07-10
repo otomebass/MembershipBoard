@@ -1,12 +1,12 @@
 package Action;
-
+  
 import javax.servlet.http.*;
 
 import VO.*;
 import service.*;
 
 public class BoardWriteProAction implements Action {
-
+ 
 	@Override
 	public Path execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 

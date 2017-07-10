@@ -23,11 +23,10 @@ public class FrontController extends HttpServlet {
 		String command = requestURI.substring(contextPath.length());
 		Path path = null;
 		Action action = null;
-
 		if (command.equals("/MainPage.do")) {
 			path = new Path();
 			path.setRedirect(true);
-			path.setPath(request.getContextPath() + "/MainPage.jsp");
+			path.setPath(request.getContextPath() + "/index.jsp");
 		} else if (command.equals("/boardList.do")) {
 			action = new BoardListAction();
 			try {
@@ -82,14 +81,28 @@ public class FrontController extends HttpServlet {
 			request.setAttribute("boardNo", boardNo);
 			path = new Path();
 			path.setPath("/board/boardDelete.jsp");
-		} else if (command.equals("/AdminPage.do")) {
-			path = new Path();
-			path.setPath("/board/AdminPage.jsp");
 		} else if (command.equals("/replyPro.do")) {
 			action = new ReplyProAction();
 			try {
 				path = action.execute(request, response);
 			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		} else if (command.equals("/replyDeletePro.do")) {
+			action = new DeleteReplyAction();
+			try {
+				path = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		} else if (command.equals("/AdminPage.do")) {
+			action = new AdminPageAction();
+			try {
+				path = action.execute(request, response);
+			} catch (Exception e) {
+				// TODO: handle exception
 				e.printStackTrace();
 			}
 		} else if (command.equals("/AdminConfirmUser.do")) {
@@ -119,6 +132,22 @@ public class FrontController extends HttpServlet {
 				// TODO: handle exception
 				e.printStackTrace();
 			}
+		} else if (command.equals("/Reject.do")) {
+			action = new AdminRejectAction();
+			try {
+				path = action.execute(request, response);
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		} else if (command.equals("/Ban.do")) {
+			action = new AdminBanUser();
+			try {
+				path = action.execute(request, response);
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
 		} else if (command.equals("/AdminUserList.do")) {
 			action = new AdminUserListAction();
 			try {
@@ -129,6 +158,37 @@ public class FrontController extends HttpServlet {
 			}
 		} else if (command.equals("/loginChk.do")) {
 			action = new LoginProAction();
+			try {
+				path = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else if (command.equals("/AdminBanList.do")) {
+			action = new AdminBanListAction();
+			try {
+				path = action.execute(request, response);
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		} else if (command.equals("/Rejoin.do")) {
+			action = new AdminRejoinUserAction();
+			try {
+				path = action.execute(request, response);
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		} else if (command.equals("/DeleteUser.do")) {
+			action = new AdminDeleteUserAction();
+			try {
+				path = action.execute(request, response);
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		} else if (command.equals("/idCheck.do")) {
+			action = new IdCheckAction();
 			try {
 				path = action.execute(request, response);
 			} catch (Exception e) {

@@ -1,12 +1,12 @@
 package DB;
-
+ 
 import java.sql.*;
 
 import javax.naming.*;
 import javax.sql.*;
 
 public class DB {
-
+ 
 	public static Connection getConnection() {
 		Connection conn = null;
 		try {
@@ -27,7 +27,7 @@ public class DB {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	} 
+	}  
 
 	public static void close(Statement stmt) {
 		try {

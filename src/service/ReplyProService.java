@@ -27,4 +27,20 @@ public class ReplyProService {
 		close(conn);
 		return isWriteSuccess;
 	}
+
+	public void updateReplyCount(int boardNo, String boardReply) {
+		Connection conn = getConnection();
+		DAO dao = DAO.getInstance();
+		dao.setConnection(conn);
+
+		int isSuccessReply = dao.updateReplycount(boardNo, boardReply);
+
+		if (isSuccessReply > 0) {
+			commit(conn);
+		} else {
+			rollback(conn);
+		}
+		close(conn);
+	}
+
 }
