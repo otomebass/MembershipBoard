@@ -99,7 +99,6 @@ public class FrontController extends HttpServlet {
 
 		} else if (command.equals("/AdminPage.do")) {
 			action = new AdminPageAction();
-			System.out.println("냥냥");
 			try {
 				path = action.execute(request, response);
 			} catch (Exception e) {

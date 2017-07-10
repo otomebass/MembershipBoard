@@ -14,7 +14,6 @@
 
 <body>
 
-
 	<jsp:include page="header.jsp" />
 	<div class="container">
 
@@ -106,7 +105,7 @@
 					<li><span style="text-color: black;">&laquo;</span></li>
 				</c:when>
 				<c:otherwise>
-					<li><a href="boardList.do?page=${pageInfo.page-1 }"><span style="text-color: black;">&laquo;</span></a></li>
+					<li><a href="boardList.do?page=${pageInfo.page-1 }&sort=${sort}&search=${search}"><span style="text-color: black;">&laquo;</span></a></li>
 				</c:otherwise>
 			</c:choose>
 
@@ -119,7 +118,7 @@
 
 						<c:choose>
 							<c:when test="${sort eq 'searchPro' }">
-								<li><a href="boardList.do?page=${pNo }&sort=searchPro"><span style="text-color: black;">${pNo }</span></a></li>
+								<li><a href="boardList.do?page=${pNo }&sort=searchPro&search=${search}"><span style="text-color: black;">${pNo }</span></a></li>
 							</c:when>
 							<c:when test="${sort eq 'readCount' }">
 								<li><a href="boardList.do?page=${pNo }&sort=readCount"><span style="text-color: black;">${pNo }</span></a></li>
@@ -140,7 +139,7 @@
 					<li><span style="text-color: black;">&raquo;</span></li>
 				</c:when>
 				<c:otherwise>
-					<li><a href="boardList.do?page=${pageInfo.page+1 }"><span style="text-color: black;">&raquo;</span></a></li>
+					<li><a href="boardList.do?page=${pageInfo.page+1 }&sort=${sort}&search=${search}"><span style="text-color: black;">&raquo;</span></a></li>
 				</c:otherwise>
 			</c:choose>
 		</ul>

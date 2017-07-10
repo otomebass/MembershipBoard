@@ -1,6 +1,6 @@
 package service;
 
-import static DB.DB.close;
+import static DB.DB.*;
 import static DB.DB.getConnection;
 
 import java.sql.Connection;
@@ -15,8 +15,12 @@ public class NewUserService {
 		DAO dao = DAO.getInstance();
 		dao.setConnection(conn);
 		int isJoinSuccess = dao.New(newuser);
-		conn.commit();
-		close(conn);
+		if (isJoinSuccess > 0) {
+			commit(conn);
+			close(conn);
+		} else {
+			rollback(conn);
+		}
 		return isJoinSuccess;
 	}
 }

@@ -1,12 +1,10 @@
 package service;
 
-import static DB.DB.close;
-import static DB.DB.commit;
-import static DB.DB.getConnection;
+import static DB.DB.*;
 
-import java.sql.Connection;
+import java.sql.*;
 
-import DAO.DAO;
+import DAO.*;
 
 public class AdminBanService {
 
@@ -15,9 +13,20 @@ public class AdminBanService {
 		DAO dao = DAO.getInstance();
 		dao.setConnection(conn);
 
-		dao.MoveUserBan(dao.Selectoneiduser(id));
-		dao.BanDoneMove(id);
-		commit(conn);
-		close(conn);
+		int isSuccessMove = dao.MoveUserBan(dao.Selectoneiduser(id));
+		if (isSuccessMove > 0) {
+			commit(conn);
+			close(conn);
+		} else {
+			rollback(conn);
+		}
+
+		int isSuccessDoneMove = dao.BanDoneMove(id);
+		if (isSuccessDoneMove > 0) {
+			commit(conn);
+			close(conn);
+		} else {
+			rollback(conn);
+		}
 	}
 }

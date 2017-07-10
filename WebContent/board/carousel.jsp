@@ -49,7 +49,7 @@
 	<script src="<%=request.getContextPath()%>/js/bootstrap.min.js" type="text/javascript"></script>
 	<script>
 		$('.carousel').carousel({
-			interval : 2500
+			interval : 2000
 		});
 	</script>
 </body>

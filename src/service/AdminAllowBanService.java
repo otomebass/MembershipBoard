@@ -1,24 +1,33 @@
 package service;
 
-import static DB.DB.close;
-import static DB.DB.commit;
-import static DB.DB.getConnection;
+import static DB.DB.*;
 
-import java.sql.Connection;
+import java.sql.*;
 
-import DAO.DAO;
+import DAO.*;
 
 public class AdminAllowBanService {
 
-	public void allow(String id){
+	public void allow(String id) {
 		Connection conn = getConnection();
 		DAO dao = DAO.getInstance();
 		dao.setConnection(conn);
-		
-		dao.movetouser(dao.Selectbanuser(id));
-		dao.deleteBan(id);
-		
-		commit(conn);
-		close(conn);
+
+		int isSuccessMove = dao.movetouser(dao.Selectbanuser(id));
+		if (isSuccessMove > 0) {
+			commit(conn);
+			close(conn);
+		} else {
+			rollback(conn);
+		}
+
+		int isSuccessBan = dao.deleteBan(id);
+		if (isSuccessBan > 0) {
+			commit(conn);
+			close(conn);
+		} else {
+			rollback(conn);
+		}
+
 	}
 }
