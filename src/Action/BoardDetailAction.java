@@ -14,7 +14,7 @@ public class BoardDetailAction implements Action {
 		ArrayList<ReplyBean> replyList = new ArrayList<ReplyBean>();
 		Path path = null;
 		String sort="boardList";
-		String search="";
+		String search="boardList";
 		
 		int boardNo = Integer.parseInt(request.getParameter("boardNo"));
 		String page = request.getParameter("page");
@@ -31,14 +31,14 @@ public class BoardDetailAction implements Action {
 		if (request.getParameter("sort") != null) {
 			sort = request.getParameter("sort");
 			search = request.getParameter("search");
-			request.setAttribute("search", search);
-			request.setAttribute("sort", sort);
 			path = new Path();
 			path.setPath("/board/boardView.jsp");
 		}else {			
 			path = new Path();
 			path.setPath("/board/boardView.jsp");
 		}
+		request.setAttribute("search", search);
+		request.setAttribute("sort", sort);
 		
 		return path;
 	}
