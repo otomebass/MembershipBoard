@@ -30,7 +30,7 @@
 		<div class="row">
 			<div class="col-xs-5"></div>
 			<div class="col-xs-7">
-				<button class="btn btn-danger pull-right" type="button" onclick="location.href='boardList.do?page=${page}'">
+				<button class="btn btn-danger pull-right" type="button" onclick="javascript:history.back()">
 					<strong>목록</strong>
 				</button>
 				<c:if test="${userId eq article.id }">
