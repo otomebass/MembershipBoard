@@ -15,8 +15,8 @@ public class BoardListAction implements Action {
 		Path path = null;
 		int page = 1; // 현재 페이지
 		int limit = 11; // 한 페이지에 몇 개의 글을 보여 줄 것인가
-		String sort = "boardList";
-		String search = "";
+		String sort="boardList";
+		String search="";
 
 		if (request.getParameter("page") != null) {
 			page = Integer.parseInt(request.getParameter("page"));
@@ -29,13 +29,13 @@ public class BoardListAction implements Action {
 			request.setAttribute("sort", sort);
 			path = new Path();
 			path.setPath("/board/boardList.jsp?sort=" + sort);
-		} else {
+		} else {			
 			path = new Path();
 			path.setPath("/board/boardList.jsp");
 		}
 
 		BoardListService boardListService = new BoardListService();
-		int listCount = boardListService.getListCount(sort,search); // 게시글의 총 개수를 구해옴
+		int listCount = boardListService.getListCount(sort, search); // 게시글의 총 개수를 구해옴
 		articleList = boardListService.getArticleList(page, limit, sort, search);
 		// 게시글의 리스트를구해옴
 		int maxPage = listCount / limit;

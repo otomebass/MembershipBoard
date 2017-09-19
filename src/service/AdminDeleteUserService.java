@@ -8,7 +8,7 @@ import DAO.*;
 
 public class AdminDeleteUserService {
 
-	public void DeleteUser(String id) {
+	public void DeleteUser(String id) throws Exception {
 		Connection conn = getConnection();
 		DAO dao = DAO.getInstance();
 		dao.setConnection(conn);
@@ -17,9 +17,9 @@ public class AdminDeleteUserService {
 
 		if (isSuccessDeleteUser > 0) {
 			commit(conn);
-			close(conn);
 		} else {
 			rollback(conn);
 		}
+		close(conn);
 	}
 }

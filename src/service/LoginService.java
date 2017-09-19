@@ -9,7 +9,7 @@ import VO.*;
 
 public class LoginService {
 
-	public User getLoginUser(String id, String pwd) {
+	public User getLoginUser(String id, String pwd) throws Exception {
 		DAO dao = DAO.getInstance();
 		Connection conn = getConnection();
 		dao.setConnection(conn);
@@ -18,4 +18,3 @@ public class LoginService {
 		return loginUser;
 	}
 }
-    

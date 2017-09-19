@@ -19,11 +19,11 @@ public class IdCheckService {
 		if (idCheck > 0) {
 			idCheckNotOk = true;
 			commit(conn);
-			close(conn);
 		} else {
 			rollback(conn);
 		}
 
+		close(conn);
 		return idCheckNotOk;
 	}
 }

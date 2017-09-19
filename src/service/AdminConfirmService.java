@@ -1,6 +1,6 @@
 package service;
 
-import static DB.DB.close;
+import static DB.DB.*;
 import static DB.DB.getConnection;
 
 import java.sql.Connection;
@@ -12,7 +12,7 @@ import VO.NewUser;
 
 public class AdminConfirmService {
 
-	public ArrayList<NewUser> confirm() throws Exception{
+	public ArrayList<NewUser> confirm() throws Exception {
 		ArrayList<NewUser> newuser = null;
 		Connection conn = getConnection();
 		DAO dao = DAO.getInstance();
@@ -22,4 +22,3 @@ public class AdminConfirmService {
 		return newuser;
 	}
 }
-  

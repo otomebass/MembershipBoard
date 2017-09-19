@@ -12,7 +12,10 @@ public class BoardDetailAction implements Action {
 	@Override
 	public Path execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ArrayList<ReplyBean> replyList = new ArrayList<ReplyBean>();
-
+		Path path = null;
+		String sort="boardList";
+		String search="";
+		
 		int boardNo = Integer.parseInt(request.getParameter("boardNo"));
 		String page = request.getParameter("page");
 		BoardDetailService boardDetailService = new BoardDetailService();
@@ -20,13 +23,23 @@ public class BoardDetailAction implements Action {
 		replyList = boardDetailService.getReplyList(boardNo);
 		int successReplyCount = boardDetailService.getReplyCount(boardNo);
  
-		Path path = new Path();
 		request.setAttribute("replyCount", successReplyCount);
 		request.setAttribute("page", page);
 		request.setAttribute("article", article);
 		request.setAttribute("replyList", replyList);
-		path.setPath("/board/boardView.jsp");
-
+		
+		if (request.getParameter("sort") != null) {
+			sort = request.getParameter("sort");
+			search = request.getParameter("search");
+			request.setAttribute("search", search);
+			request.setAttribute("sort", sort);
+			path = new Path();
+			path.setPath("/board/boardView.jsp");
+		}else {			
+			path = new Path();
+			path.setPath("/board/boardView.jsp");
+		}
+		
 		return path;
 	}
  

@@ -10,7 +10,7 @@ import VO.*;
 
 public class BoardDetailService {
 
-	public int getReplyCount(int boardNo) {
+	public int getReplyCount(int boardNo) throws Exception {
 		Connection conn = getConnection();
 		DAO dao = DAO.getInstance();
 		dao.setConnection(conn);

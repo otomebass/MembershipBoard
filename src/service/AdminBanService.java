@@ -16,7 +16,6 @@ public class AdminBanService {
 		int isSuccessMove = dao.MoveUserBan(dao.Selectoneiduser(id));
 		if (isSuccessMove > 0) {
 			commit(conn);
-			close(conn);
 		} else {
 			rollback(conn);
 		}
@@ -24,9 +23,9 @@ public class AdminBanService {
 		int isSuccessDoneMove = dao.BanDoneMove(id);
 		if (isSuccessDoneMove > 0) {
 			commit(conn);
-			close(conn);
 		} else {
 			rollback(conn);
 		}
+		close(conn);
 	}
 }

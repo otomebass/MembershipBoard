@@ -17,10 +17,10 @@ public class NewUserService {
 		int isJoinSuccess = dao.New(newuser);
 		if (isJoinSuccess > 0) {
 			commit(conn);
-			close(conn);
 		} else {
 			rollback(conn);
 		}
+		close(conn);
 		return isJoinSuccess;
 	}
 }

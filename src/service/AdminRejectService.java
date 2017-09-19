@@ -16,7 +16,6 @@ public class AdminRejectService {
 		int isSuccessMove = dao.MoveRejectUser(dao.SelectOneid(id));
 		if (isSuccessMove > 0) {
 			commit(conn);
-			close(conn);
 		} else {
 			rollback(conn);
 		}
@@ -24,9 +23,9 @@ public class AdminRejectService {
 		int isSuccessDone = dao.DoneMove(id);
 		if (isSuccessDone > 0) {
 			commit(conn);
-			close(conn);
 		} else {
 			rollback(conn);
 		}
+		close(conn);
 	}
 }

@@ -1,6 +1,6 @@
 package service;
 
-import static DB.DB.close;
+import static DB.DB.*;
 import static DB.DB.getConnection;
 
 import java.sql.Connection;

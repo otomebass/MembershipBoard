@@ -8,6 +8,7 @@ import DAO.DAO;
 public class AdminConfirmOkService {
 
 	public void ConfirmOk(String id) throws Exception {
+
 		Connection conn = getConnection();
 		DAO dao = DAO.getInstance();
 		dao.setConnection(conn);
@@ -15,7 +16,6 @@ public class AdminConfirmOkService {
 		int isSuccessMove = dao.MoveUser(dao.SelectOneid(id));
 		if (isSuccessMove > 0) {
 			commit(conn);
-			close(conn);
 		} else {
 			rollback(conn);
 		}
@@ -23,9 +23,9 @@ public class AdminConfirmOkService {
 		int isSuccessDone = dao.DoneMove(id);
 		if (isSuccessDone > 0) {
 			commit(conn);
-			close(conn);
 		} else {
 			rollback(conn);
 		}
+		close(conn);
 	}
 }

@@ -30,7 +30,7 @@
 		<div class="row">
 			<div class="col-xs-5"></div>
 			<div class="col-xs-7">
-				<button class="btn btn-danger pull-right" type="button" onclick="javascript:history.back()">
+				<button class="btn btn-danger pull-right" type="button" onclick="location.href='boardList.do?page=${page}&sort=${sort}&search=${search}'">
 					<strong>목록</strong>
 				</button>
 				<c:if test="${userId eq article.id }">
@@ -127,9 +127,9 @@
 						<div class="modal-body">
 							<div class="form-group">
 								<label>
-									<strong>글 비밀번호</strong>
+									<strong>사용자 비밀번호</strong>
 								</label>
-								<input class="form-control" type="password" name="password" required="required" placeholder="비밀번호" />
+								<input class="form-control" type="password" name="password" required="required" placeholder="비밀번호" autofocus="autofocus" />
 							</div>
 						</div>
 
