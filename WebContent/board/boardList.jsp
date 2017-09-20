@@ -67,7 +67,7 @@
 							</td>
 							<td class="col-md-1 text-center">${article.readCount }</td>
 						</tr>
-						<c:if test="${not empty param.search }">
+						<c:if test="${param.sort eq 'searchPro'}">
 							<tr>
 								<td colspan="5">
 									<c:set var="searchContent" value="${article.content }" />
